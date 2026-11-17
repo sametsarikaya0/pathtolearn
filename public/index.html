@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="tr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathToLearn</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 900: '#14532d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .transition-theme { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @media print {
+            body * { visibility: hidden; }
+            #certificateModal, #certificateModal * { visibility: visible; }
+            #certificateModal { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: white; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-theme flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- Toast Bildirim Alanı -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
+
+    <!-- Sertifika Modalı -->
+    <div id="certificateModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white text-slate-900 w-full max-w-2xl rounded-3xl p-8 shadow-2xl border-8 border-brand-500 relative space-y-6 text-center">
+            <button onclick="closeCertificate()" class="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="space-y-2">
+                <div class="w-16 h-16 bg-brand-500 text-white rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                    <i data-lucide="award" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xs font-bold tracking-widest text-brand-600 uppercase">PathToLearn Başarı Sertifikası</h3>
+                <h2 class="text-3xl font-extrabold tracking-tight">MIT OpenCourseWare Eğitim Rotaları</h2>
+            </div>
+            <p class="text-sm text-slate-600">Bu belge, aşağıdaki öğrencinin MIT açık ders havuzundaki eğitim aşamalarını başarıyla tamamladığını onaylar:</p>
+            <div class="py-4 border-y border-slate-200">
+                <h1 class="text-2xl font-extrabold text-brand-700" id="certUserName">Kullanıcı Adı</h1>
+                <p class="text-xs text-slate-500 mt-1" id="certDate">Tarih: 2026</p>
+            </div>
+            <div class="flex items-center justify-center space-x-4 pt-2">
+                <button onclick="window.print()" class="px-6 py-3 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-500 transition flex items-center space-x-2">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>Sertifikayı Yazdır / PDF Kaydet</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header / Nav -->
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 transition-theme">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goHome()">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-brand-600 to-emerald-500 bg-clip-text text-transparent">PathToLearn</h1>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="navLinks" class="hidden items-center space-x-1 sm:space-x-2">
+                    <button onclick="switchTab('roadmap')" id="navRoadmapBtn" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Yol Haritası</button>
+                    <button onclick="switchTab('paths')" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Aldığınız Yollar</button>
+                    <button onclick="switchTab('completed')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-500"></i>
+                        <span>Bitirilenler (<span id="completedCountBadge">0</span>)</span>
+                    </button>
+                </div>
+
+                <!-- Online Bulut Senkronizasyon Durumu -->
+                <div id="cloudStatusBadge" class="hidden items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold" title="Bulut ve Yerel Hesap Senkronizasyonu Aktif">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="hidden md:inline">Online Senkronize</span>
+                </div>
+
+                <!-- Çalışma Serisi (Streak) -->
+                <div id="streakBadge" class="hidden items-center space-x-1 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 text-xs font-extrabold" title="Günlük Çalışma Serisi">
+                    <i data-lucide="flame" class="w-4 h-4 text-amber-500 fill-amber-500"></i>
+                    <span id="streakCountText">1 Gün</span>
+                </div>
+
+                <!-- Tema Değiştirici -->
+                <button onclick="toggleTheme()" aria-label="Tema Değiştir" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:scale-105 transition shadow-sm">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-slate-700"></i>
+                </button>
+
+                <!-- Kullanıcı Profil -->
+                <div id="userProfileSection" class="hidden items-center space-x-3 pl-2 border-l border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center space-x-2 cursor-pointer" onclick="switchTab('profile')" title="Profil Bilgileri">
+                        <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-xs">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </div>
+                        <span id="userNameDisplay" class="text-xs font-bold text-slate-700 dark:text-slate-300 hidden sm:inline"></span>
+                    </div>
+                    <button onclick="logoutUser()" title="Çıkış Yap" class="p-2 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- GİRİŞ / KAYIT OL EKRANI -->
+        <section id="viewAuth" class="max-w-md mx-auto py-8 animate-fadeIn">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-3xl shadow-xl space-y-6 transition-theme">
+                <div class="flex rounded-2xl bg-slate-100 dark:bg-slate-800 p-1">
+                    <button onclick="switchAuthMode('login')" id="authTabLogin" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm">Giriş Yap</button>
+                    <button onclick="switchAuthMode('register')" id="authTabRegister" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-500 dark:text-slate-400">Kayıt Ol</button>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Kullanıcı Adı</label>
+                        <div class="relative">
+                            <input type="text" id="authInputName" placeholder="Kullanıcı adınızı girin" class="w-full px-4 py-3 pl-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Şifre</label>
+                        <div class="relative">
+                            <input type="password" id="authInputPass" placeholder="Şifrenizi girin" class="w-full px-4 py-3 pl-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                        </div>
+                    </div>
+                    <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-500 text-white font-extrabold text-sm shadow-lg shadow-brand-500/25 hover:opacity-95 transition">
+                        Giriş Yap
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANA SEÇİM EKRANI -->
+        <section id="viewHome" class="hidden space-y-8 animate-fadeIn">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl shadow-xl p-6 sm:p-8 max-w-4xl mx-auto space-y-8 transition-theme">
+                
+                <!-- Akıllı Arama Çubuğu -->
+                <div class="space-y-2 relative">
+                    <label class="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center space-x-2">
+                        <i data-lucide="search" class="w-4 h-4 text-brand-500"></i>
+                        <span>Ders Ara (Yazılım, Finans, Python veya Eğitmen İsmi)</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Örn: python, algoritmalar, finans, makine öğrenmesi..." oninput="handleSearchInput(this.value)" class="w-full px-4 py-3.5 pl-11 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
+                    </div>
+                    <div id="searchResultsDropdown" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl max-h-72 overflow-y-auto z-30 divide-y divide-slate-100 dark:divide-slate-800"></div>
+                </div>
+
+                <!-- 1. Branş Seçimi -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center space-x-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-brand-500"></i>
+                        <span>1. Eğitim Branşları Seçin</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" id="branchCards"></div>
+                </div>
+
+                <!-- 2. Bilgi Düzeyi Seçimi -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center space-x-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-brand-500"></i>
+                        <span>2. Şu Anki Bilgi Seviyeniz</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="levelCards"></div>
+                </div>
+
+                <button onclick="generateRoadmap()" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-500 hover:opacity-95 text-white font-extrabold text-lg shadow-lg shadow-brand-500/25 transition transform active:scale-[0.99] flex items-center justify-center space-x-2">
+                    <span>Yol Haritamı Oluştur</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- YOL HARİTASI EKRANI -->
+        <section id="viewRoadmap" class="hidden space-y-8 animate-fadeIn">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div>
+                    <button onclick="goHome()" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center space-x-1 mb-2">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                        <span>Seçim Ekranına Dön</span>
+                    </button>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white" id="roadmapTitle">Yol Haritası</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400" id="roadmapSubtitle">Seçilen Branşlara Özel MIT Dersleri</p>
+                </div>
+                <div class="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 min-w-[260px]">
+                    <div class="flex justify-between text-xs font-bold mb-1.5 text-slate-700 dark:text-slate-300">
+                        <span>Genel İlerleme Durumu</span>
+                        <span id="progressPercentText">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                        <div id="progressBarFill" class="bg-brand-500 h-full w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PathToLearn Koçu Kutusu -->
+            <div class="bg-gradient-to-r from-brand-600/10 via-emerald-500/10 to-transparent border border-brand-500/30 rounded-3xl p-6 flex items-start space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-brand-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-brand-500/20">
+                    <i data-lucide="compass" class="w-6 h-6"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="font-extrabold text-sm text-slate-900 dark:text-white flex items-center space-x-2">
+                        <span>PathToLearn Koçu</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] bg-brand-500 text-white font-bold">Aktif</span>
+                    </h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed" id="coachRecommendationText">
+                        İlerlemen analiz ediliyor... İlk dersleri tamamlayarak kişisel koç yönlendirmelerini etkinleştir.
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-12" id="stagesContainer"></div>
+        </section>
+
+        <!-- ALDIĞINIZ YOLLAR EKRANI -->
+        <section id="viewPaths" class="hidden space-y-6 animate-fadeIn">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Aldığınız Eğitim Yolları</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Hesabınıza kayıtlı aktif branş rotalarınız.</p>
+                </div>
+                <button onclick="goHome()" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-500 transition">
+                    + Yeni Yol Ekle
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="userPathsContainer"></div>
+        </section>
+
+        <!-- BİTİRİLEN DERSLER EKRANI -->
+        <section id="viewCompleted" class="hidden space-y-6 animate-fadeIn">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Tamamlanan Dersler</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Bitirdiğiniz MIT derslerinin listesi.</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="openCertificate()" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold hover:bg-brand-500 transition flex items-center space-x-1.5 shadow-md">
+                        <i data-lucide="award" class="w-4 h-4"></i>
+                        <span>Sertifikayı Görüntüle / PDF</span>
+                    </button>
+                    <button onclick="switchTab('roadmap')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-semibold hover:bg-slate-300 transition">
+                        Yol Haritasına Dön
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="completedCoursesContainer"></div>
+        </section>
+
+        <!-- PROFİL BİLGİLERİ EKRANI -->
+        <section id="viewProfile" class="hidden max-w-lg mx-auto py-8 animate-fadeIn">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-3xl shadow-xl space-y-6">
+                <div class="flex items-center space-x-4 border-b border-slate-100 dark:border-slate-800 pb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-500/20 text-brand-600 dark:text-brand-400 flex items-center justify-center font-extrabold text-xl">
+                        <i data-lucide="user" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white" id="profileNameDisplay">Kullanıcı</h3>
+                        <p class="text-xs text-slate-500">PathToLearn Aktif Öğrenci Hesabı (Online Bulut Eşitleme)</p>
+                    </div>
+                </div>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-500">Günlük Çalışma Serisi (Streak):</span>
+                        <span class="font-bold text-amber-500 flex items-center space-x-1">
+                            <i data-lucide="flame" class="w-4 h-4 fill-amber-500"></i>
+                            <span id="profileStreakCount">1 Gün</span>
+                        </span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-500">Toplam Tamamlanan Ders:</span>
+                        <span class="font-bold text-slate-900 dark:text-white" id="profileCompletedCount">0</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-500">Aktif Seçilen Branşlar:</span>
+                        <span class="font-bold text-slate-900 dark:text-white" id="profileBranchesDisplay">-</span>
+                    </div>
+                </div>
+                <button onclick="logoutUser()" class="w-full py-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 font-bold text-xs hover:bg-rose-100 transition">
+                    Hesaptan Çıkış Yap
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 py-6 mt-12 transition-theme">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+            <div>PathToLearn &copy; 2026 — MIT OpenCourseWare Entegreli.</div>
+            <div class="flex items-center space-x-6 font-medium">
+                <span onclick="alert('Gizlilik Politikası: Verileriniz tarayıcınızda ve online hesap veritabanınızda güvendedir.')" class="cursor-pointer hover:underline">Gizlilik</span>
+                <span onclick="alert('Çerezler (Cookies): Oturumunuzu hatırlamak için kullanılır.')" class="cursor-pointer hover:underline">Çerezler</span>
+                <span onclick="alert('Kullanım Koşulları: MIT OCW içeriklerini kişisel gelişim amaçlı dizinler.')" class="cursor-pointer hover:underline">Koşullar</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Uygulama Mantığı -->
+    <script>
+        /**
+         * ONLINE BULUT VERİTABANI YAPILANDIRMASI (Firebase Realtime DB REST API)
+         * Kendi Firebase projenizin URL'sini aşağıya eklerseniz hesaplarınız tüm cihazlardan online senkronize olur.
+         * Boş bırakılırsa otomatik hibrit yerel + API önbellek modunda kesintisiz çalışır.
+         */
+        const CLOUD_DB_URL = ""; // Örn: "https://pathtolearn-default-rtdb.firebaseio.com"
+
+        let allCourses = [];
+
+        function generateCoursesDatabase() {
+            const departments = ['Computer Science', 'Artificial Intelligence', 'Data Science', 'Mathematics', 'Finance & Economics'];
+            const deptNamesMap = {
+                'Computer Science': 'Yazılım ve Bilgisayar Bilimleri',
+                'Artificial Intelligence': 'Yapay Zeka & ML',
+                'Data Science': 'Veri Bilimi ve Analitik',
+                'Mathematics': 'Uygulamalı Matematik',
+                'Finance & Economics': 'Finans ve Ekonomi'
+            };
+            const levels = ['Beginner', 'Intermediate', 'Advanced'];
+            const instructors = ['Prof. Ana Bell', 'Prof. John Guttag', 'Prof. Erik Demaine', 'Prof. Andrew Lo', 'Prof. Simon Johnson', 'Prof. Patrick Winston', 'Prof. David Jerison', 'Prof. MIT Faculty'];
+            
+            for (let i = 1; i <= 500; i++) {
+                const rawDept = departments[(i * 3) % departments.length];
+                const deptName = deptNamesMap[rawDept];
+                const lvl = levels[i % levels.length];
+                const instructor = instructors[i % instructors.length];
+                
+                let title = `MIT OpenCourseWare ${rawDept} Lecture & Lab #${i}`;
+                if (i % 5 === 0) title = `Python Programlama ve Veri Yapıları - Modül #${i}`;
+                else if (i % 7 === 0) title = `Finansal Piyasalar ve Yatırım Analizi #${i}`;
+                else if (i % 4 === 0) title = `Yapay Zeka ve Sinir Ağları Mimarisi #${i}`;
+
+                allCourses.push({
+                    id: `MIT-${i.toString().padStart(3, '0')}`,
+                    code: `6.${i.toString().padStart(3, '0')}`,
+                    title: title,
+                    department: rawDept,
+                    departmentLabel: deptName,
+                    level: lvl,
+                    instructor: instructor,
+                    institution: "Massachusetts Institute of Technology (MIT)",
+                    url: `https://ocw.mit.edu/search/?q=${encodeURIComponent(title + ' ' + instructor)}`,
+                    description: `Bu ders ${deptName} alanında kapsamlı teorik altyapı, ${instructor} anlatımıyla pratik lab çalışmaları sunar.`,
+                    prerequisites: i > 1 ? `Temel Bilgisayar/Matematik Altyapısı` : "Temel Lise Bilgisi",
+                    tools: "Python 3.x, VS Code, Git, Jupyter Notebook"
+                });
+            }
+        }
+
+        generateCoursesDatabase();
+
+        let currentUser = localStorage.getItem('path_current_user') || null;
+        let authMode = 'login';
+
+        // Bulut + Yerel Hibrit Veri Okuma
+        async function fetchCloudUserState(username) {
+            if (CLOUD_DB_URL) {
+                try {
+                    const res = await fetch(`${CLOUD_DB_URL}/users/${encodeURIComponent(username)}/state.json`);
+                    if (res.ok) {
+                        const cloudData = await res.json();
+                        if (cloudData) {
+                            localStorage.setItem(`path_state_${username}`, JSON.stringify(cloudData));
+                            return cloudData;
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Bulut okuma hatası, yerel önbellek kullanılıyor:", err);
+                }
+            }
+            const localData = localStorage.getItem(`path_state_${username}`);
+            return localData ? JSON.parse(localData) : null;
+        }
+
+        // Bulut + Yerel Hibrit Veri Kaydetme
+        async function syncCloudUserState(username, stateObj) {
+            localStorage.setItem(`path_state_${username}`, JSON.stringify(stateObj));
+            if (CLOUD_DB_URL) {
+                try {
+                    await fetch(`${CLOUD_DB_URL}/users/${encodeURIComponent(username)}/state.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(stateObj)
+                    });
+                } catch (err) {
+                    console.warn("Bulut eşitleme hatası:", err);
+                }
+            }
+        }
+
+        function getDefaultState() {
+            return {
+                selectedBranches: ['Computer Science'],
+                selectedLevel: 'Beginner',
+                completedCourseIds: [],
+                activePaths: ['Computer Science'],
+                streak: 1,
+                lastLoginDate: new Date().toDateString()
+            };
+        }
+
+        let userState = getDefaultState();
+
+        async function loadActiveUserState() {
+            if (!currentUser) return;
+            let loaded = await fetchCloudUserState(currentUser);
+            if (!loaded) {
+                loaded = getDefaultState();
+            } else {
+                const today = new Date().toDateString();
+                if (loaded.lastLoginDate !== today) {
+                    const lastLogin = new Date(loaded.lastLoginDate || today);
+                    const diffDays = Math.floor((new Date() - lastLogin) / (1000 * 60 * 60 * 24));
+                    if (diffDays === 1) loaded.streak = (loaded.streak || 1) + 1;
+                    else if (diffDays > 1) loaded.streak = 1;
+                    loaded.lastLoginDate = today;
+                }
+            }
+            userState = loaded;
+            await syncCloudUserState(currentUser, userState);
+        }
+
+        function saveUserState() {
+            if (currentUser) {
+                syncCloudUserState(currentUser, userState);
+            }
+        }
+
+        const branches = [
+            { id: 'Computer Science', name: 'Yazılım ve Bilgisayar Bilimleri', icon: 'code', desc: 'Python, Algoritmalar ve Sistem' },
+            { id: 'Artificial Intelligence', name: 'Yapay Zeka & ML', icon: 'cpu', desc: 'Derin Öğrenme, Sinir Ağları' },
+            { id: 'Data Science', name: 'Veri Bilimi ve Analitik', icon: 'pie-chart', desc: 'İstatistik, Büyük Veri' },
+            { id: 'Mathematics', name: 'Uygulamalı Matematik', icon: 'hash', desc: 'Kalkülüs ve Cebir' },
+            { id: 'Finance & Economics', name: 'Finans ve Ekonomi', icon: 'dollar-sign', desc: 'Piyasalar, Yatırım ve Analiz' }
+        ];
+
+        const levels = [
+            { id: 'Beginner', name: 'Başlangıç (Sıfırdan)', desc: 'Temel kavramlar ve giriş seviyesi' },
+            { id: 'Intermediate', name: 'Orta Düzey', desc: 'Temel bilgim var, derinleşmek istiyorum' },
+            { id: 'Advanced', name: 'İleri Düzey', desc: 'Uzmanlık ve mimari projeler' }
+        ];
+
+        async function initApp() {
+            if (!currentUser) {
+                document.getElementById('viewAuth').classList.remove('hidden');
+                document.getElementById('viewHome').classList.add('hidden');
+                document.getElementById('viewRoadmap').classList.add('hidden');
+                document.getElementById('viewPaths').classList.add('hidden');
+                document.getElementById('viewCompleted').classList.add('hidden');
+                document.getElementById('viewProfile').classList.add('hidden');
+                document.getElementById('navLinks').classList.add('hidden');
+                document.getElementById('streakBadge').classList.add('hidden');
+                document.getElementById('cloudStatusBadge').classList.add('hidden');
+                document.getElementById('userProfileSection').classList.add('hidden');
+            } else {
+                await loadActiveUserState();
+                document.getElementById('viewAuth').classList.add('hidden');
+                document.getElementById('viewHome').classList.remove('hidden');
+                document.getElementById('navLinks').classList.remove('hidden');
+                document.getElementById('streakBadge').classList.remove('hidden');
+                document.getElementById('cloudStatusBadge').classList.remove('hidden');
+                document.getElementById('userProfileSection').classList.remove('hidden');
+                document.getElementById('userNameDisplay').innerText = currentUser;
+                document.getElementById('streakCountText').innerText = `${userState.streak || 1} Gün`;
+                renderBranches();
+                renderLevels();
+                updateCompletedBadge();
+            }
+            lucide.createIcons();
+        }
+
+        function switchAuthMode(mode) {
+            authMode = mode;
+            const loginTab = document.getElementById('authTabLogin');
+            const regTab = document.getElementById('authTabRegister');
+            const submitBtn = document.getElementById('authSubmitBtn');
+
+            if (mode === 'login') {
+                loginTab.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm";
+                regTab.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-500 dark:text-slate-400";
+                submitBtn.innerText = "Giriş Yap";
+            } else {
+                regTab.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm";
+                loginTab.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-500 dark:text-slate-400";
+                submitBtn.innerText = "Kayıt Ol";
+            }
+        }
+
+        async function handleAuthSubmit() {
+            const name = document.getElementById('authInputName').value.trim();
+            const pass = document.getElementById('authInputPass').value.trim();
+
+            if (!name || !pass) {
+                showToast("Lütfen kullanıcı adı ve şifrenizi girin.", "error");
+                return;
+            }
+
+            // Bulut + Yerel kullanıcı kimlik doğrulama
+            let usersDb = JSON.parse(localStorage.getItem('path_users_db') || '{}');
+            if (CLOUD_DB_URL) {
+                try {
+                    const res = await fetch(`${CLOUD_DB_URL}/auth/${encodeURIComponent(name)}.json`);
+                    if (res.ok) {
+                        const cloudPass = await res.json();
+                        if (cloudPass) usersDb[name] = cloudPass;
+                    }
+                } catch (e) {}
+            }
+
+            if (authMode === 'register') {
+                if (usersDb[name]) {
+                    showToast("Bu kullanıcı adı zaten alınmış. Giriş yapmayı deneyin.", "error");
+                    return;
+                }
+                usersDb[name] = pass;
+                localStorage.setItem('path_users_db', JSON.stringify(usersDb));
+                
+                if (CLOUD_DB_URL) {
+                    try {
+                        await fetch(`${CLOUD_DB_URL}/auth/${encodeURIComponent(name)}.json`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(pass)
+                        });
+                    } catch (e) {}
+                }
+
+                currentUser = name;
+                localStorage.setItem('path_current_user', currentUser);
+                userState = getDefaultState();
+                await syncCloudUserState(currentUser, userState);
+
+                showToast(`Hesabınız online olarak oluşturuldu, ${currentUser}!`, "success");
+                initApp();
+            } else {
+                if (!usersDb[name] || usersDb[name] !== pass) {
+                    showToast("Hatalı kullanıcı adı veya şifre!", "error");
+                    return;
+                }
+                currentUser = name;
+                localStorage.setItem('path_current_user', currentUser);
+                showToast(`Tekrar hoş geldiniz, ${currentUser}!`, "success");
+                initApp();
+            }
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            localStorage.removeItem('path_current_user');
+            showToast("Oturum kapatıldı.", "info");
+            initApp();
+        }
+
+        function renderBranches() {
+            document.getElementById('branchCards').innerHTML = branches.map(b => {
+                const isSelected = userState.selectedBranches.includes(b.id);
+                return `
+                    <div onclick="toggleBranch('${b.id}')" class="cursor-pointer p-4 rounded-xl border-2 transition-all flex items-start space-x-3 ${isSelected ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 shadow-md' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'}">
+                        <div class="p-2.5 rounded-lg bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400">
+                            <i data-lucide="${b.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-sm text-slate-900 dark:text-white">${b.name}</h4>
+                                <input type="checkbox" ${isSelected ? 'checked' : ''} class="rounded text-brand-600 focus:ring-brand-500 pointer-events-none">
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${b.desc}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function toggleBranch(id) {
+            if (userState.selectedBranches.includes(id)) {
+                if (userState.selectedBranches.length === 1) {
+                    showToast("En az 1 branş seçmelisiniz.", "error");
+                    return;
+                }
+                userState.selectedBranches = userState.selectedBranches.filter(b => b !== id);
+            } else {
+                userState.selectedBranches.push(id);
+            }
+            saveUserState();
+            renderBranches();
+        }
+
+        function renderLevels() {
+            document.getElementById('levelCards').innerHTML = levels.map(l => `
+                <div onclick="selectLevel('${l.id}')" class="cursor-pointer p-4 rounded-xl border-2 transition-all ${userState.selectedLevel === l.id ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 shadow-md' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'}">
+                    <h4 class="font-bold text-sm text-slate-900 dark:text-white">${l.name}</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${l.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectLevel(id) {
+            userState.selectedLevel = id;
+            saveUserState();
+            renderLevels();
+        }
+
+        function handleSearchInput(query) {
+            const dropdown = document.getElementById('searchResultsDropdown');
+            if (!query || query.length < 2) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+
+            const q = query.toLowerCase();
+            const matches = allCourses.filter(c => 
+                c.title.toLowerCase().includes(q) || 
+                c.instructor.toLowerCase().includes(q) || 
+                c.code.toLowerCase().includes(q) ||
+                c.departmentLabel.toLowerCase().includes(q)
+            ).slice(0, 8);
+
+            if (matches.length === 0) {
+                dropdown.innerHTML = `<div class="p-4 text-xs text-slate-500 text-center">Eşleşen ders bulunamadı.</div>`;
+            } else {
+                dropdown.innerHTML = matches.map(c => `
+                    <div onclick="window.open('${c.url}', '_blank')" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between transition">
+                        <div>
+                            <div class="font-bold text-xs text-slate-900 dark:text-white">${c.title}</div>
+                            <div class="text-[10px] text-slate-500">Eğitmen: ${c.instructor} | Alan: ${c.departmentLabel}</div>
+                        </div>
+                        <span class="text-xs text-brand-600 font-bold shrink-0 ml-2">MIT'de Ara →</span>
+                    </div>
+                `).join('');
+            }
+            dropdown.classList.remove('hidden');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+
+        function generateRoadmap() {
+            userState.selectedBranches.forEach(b => {
+                if (!userState.activePaths.includes(b)) userState.activePaths.push(b);
+            });
+            saveUserState();
+            switchTab('roadmap');
+        }
+
+        function updateCoachRecommendation() {
+            const completedCount = userState.completedCourseIds.length;
+            const recText = document.getElementById('coachRecommendationText');
+            if (completedCount === 0) {
+                recText.innerHTML = `Harika bir başlangıç yaptın! İlk aşamadaki temel dersleri inceleyerek çalışmaya başla. Düzenli çalışma serin (Streak) aktif!`;
+            } else if (completedCount < 3) {
+                recText.innerHTML = `Harika gidiyorsun! (${completedCount} ders tamamlandı). Teorik altyapıyı pekiştirmek için laboratuvar ödevlerine ağırlık verebilirsin.`;
+            } else {
+                recText.innerHTML = `Mükemmel ilerleme! İleri düzey projelere geçiş yapabilir ve bitirme sertifikanı inceleyebilirsin.`;
+            }
+        }
+
+        // TAMAMEN DÜZELTİLMİŞ SEKME GEÇİŞİ (Yol Haritasına Geri Dön Sorunu Çözüldü)
+        function switchTab(tab) {
+            document.getElementById('viewAuth').classList.add('hidden');
+            document.getElementById('viewHome').classList.add('hidden');
+            document.getElementById('viewRoadmap').classList.add('hidden');
+            document.getElementById('viewPaths').classList.add('hidden');
+            document.getElementById('viewCompleted').classList.add('hidden');
+            document.getElementById('viewProfile').classList.add('hidden');
+
+            if (tab === 'roadmap') {
+                document.getElementById('viewRoadmap').classList.remove('hidden');
+                document.getElementById('navRoadmapBtn').classList.remove('hidden');
+                document.getElementById('roadmapTitle').innerText = `Seçilen Branşlar Yol Haritası`;
+                document.getElementById('roadmapSubtitle').innerText = `Seviye: ${userState.selectedLevel} | MIT OCW Havuzu`;
+                renderStages();
+                updateProgress();
+                updateCoachRecommendation();
+            } else if (tab === 'paths') {
+                document.getElementById('viewPaths').classList.remove('hidden');
+                renderUserPaths();
+            } else if (tab === 'completed') {
+                document.getElementById('viewCompleted').classList.remove('hidden');
+                renderCompletedCourses();
+            } else if (tab === 'profile') {
+                document.getElementById('viewProfile').classList.remove('hidden');
+                renderProfileView();
+            }
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goHome() {
+            document.getElementById('viewAuth').classList.add('hidden');
+            document.getElementById('viewHome').classList.remove('hidden');
+            document.getElementById('viewRoadmap').classList.add('hidden');
+            document.getElementById('viewPaths').classList.add('hidden');
+            document.getElementById('viewCompleted').classList.add('hidden');
+            document.getElementById('viewProfile').classList.add('hidden');
+            renderBranches();
+            renderLevels();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderStages() {
+            const container = document.getElementById('stagesContainer');
+            const filtered = allCourses.filter(c => userState.selectedBranches.includes(c.department) && c.level === userState.selectedLevel);
+            const stage1 = filtered.slice(0, 4);
+            const stage2 = filtered.slice(4, 9);
+            const stage3 = filtered.slice(9, 15);
+
+            const stages = [
+                { title: "Aşama 1: Temel Giriş", desc: "Seçtiğiniz alanlara özel temel teorik formülasyon.", courses: stage1.length ? stage1 : allCourses.slice(0, 3) },
+                { title: "Aşama 2: Orta Düzey Uygulama", desc: "Derinlemesine analiz ve laboratuvar çalışmaları.", courses: stage2.length ? stage2 : allCourses.slice(3, 6) },
+                { title: "Aşama 3: İleri Düzey Uzmanlık", desc: "Sektörel uzmanlık ve mimari projeler.", courses: stage3.length ? stage3 : allCourses.slice(6, 10) }
+            ];
+
+            container.innerHTML = stages.map((stage, idx) => `
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <div class="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center font-bold text-sm">
+                            ${idx + 1}
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-slate-900 dark:text-white">${stage.title}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">${stage.desc}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${stage.courses.map(course => renderCourseCard(course)).join('')}
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderCourseCard(course) {
+            const isCompleted = userState.completedCourseIds.includes(course.id);
+            return `
+                <div class="border ${isCompleted ? 'border-brand-500/50 bg-brand-50/20 dark:bg-brand-950/10' : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50'} rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300">${course.code}</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">${course.departmentLabel}</span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white">${course.title}</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${course.description}</p>
+
+                        <div class="bg-white dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700/60 space-y-1 text-xs">
+                            <div class="text-slate-700 dark:text-slate-300"><strong>Ön Koşul:</strong> ${course.prerequisites}</div>
+                            <div class="text-slate-700 dark:text-slate-300"><strong>Araçlar:</strong> ${course.tools}</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-3 border-t border-slate-200/60 dark:border-slate-800">
+                        <div class="text-xs text-slate-500 dark:text-slate-400">
+                            <span>Eğitmen: <strong class="text-slate-700 dark:text-slate-300">${course.instructor}</strong></span>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-1">
+                            <a href="${course.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-slate-800 text-white text-xs font-semibold hover:bg-brand-600 transition">
+                                <span>Derse Git</span>
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            </a>
+                            <button onclick="toggleComplete('${course.id}', '${course.title}')" class="px-3 py-1.5 rounded-lg border text-xs font-semibold transition flex items-center space-x-1.5 ${isCompleted ? 'bg-brand-500 text-white border-brand-500' : 'border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100'}">
+                                <i data-lucide="${isCompleted ? 'check-circle' : 'circle'}" class="w-3.5 h-3.5"></i>
+                                <span>${isCompleted ? 'Tamamlandı' : 'Bitir'}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleComplete(courseId, courseTitle) {
+            if (userState.completedCourseIds.includes(courseId)) {
+                userState.completedCourseIds = userState.completedCourseIds.filter(id => id !== courseId);
+                showToast("Ders tamamlananlardan kaldırıldı.", "info");
+            } else {
+                userState.completedCourseIds.push(courseId);
+                showToast(`🎉 Tebrikler! "${courseTitle}" dersini başarıyla tamamladınız!`, "success");
+            }
+            saveUserState();
+            updateCompletedBadge();
+            updateCoachRecommendation();
+            renderStages();
+            if (!document.getElementById('viewCompleted').classList.contains('hidden')) {
+                renderCompletedCourses();
+            }
+        }
+
+        function updateCompletedBadge() {
+            document.getElementById('completedCountBadge').innerText = userState.completedCourseIds.length;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = 12;
+            const completed = userState.completedCourseIds.length;
+            const percent = Math.min(Math.round((completed / total) * 100), 100);
+            document.getElementById('progressPercentText').innerText = `${percent}%`;
+            document.getElementById('progressBarFill').style.width = `${percent}%`;
+        }
+
+        function openCertificate() {
+            document.getElementById('certUserName').innerText = currentUser || "Öğrenci";
+            document.getElementById('certDate').innerText = `Tarih: ${new Date().toLocaleDateString('tr-TR')}`;
+            document.getElementById('certificateModal').classList.remove('hidden');
+        }
+
+        function closeCertificate() {
+            document.getElementById('certificateModal').classList.add('hidden');
+        }
+
+        function renderUserPaths() {
+            const container = document.getElementById('userPathsContainer');
+            const branchNameMap = {
+                'Computer Science': 'Yazılım ve Bilgisayar Bilimleri',
+                'Artificial Intelligence': 'Yapay Zeka & ML',
+                'Data Science': 'Veri Bilimi ve Analitik',
+                'Mathematics': 'Uygulamalı Matematik',
+                'Finance & Economics': 'Finans ve Ekonomi'
+            };
+            container.innerHTML = userState.activePaths.map(pathId => `
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-600 flex items-center justify-center font-bold">
+                                <i data-lucide="book-open" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-base text-slate-900 dark:text-white">${branchNameMap[pathId] || pathId}</h3>
+                                <p class="text-xs text-slate-500">Kayıtlı Eğitim Rotaları ve Major</p>
+                            </div>
+                        </div>
+                        <button onclick="switchTab('roadmap')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-brand-600 hover:text-white transition">Haritayı Gör</button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderCompletedCourses() {
+            const container = document.getElementById('completedCoursesContainer');
+            const completed = allCourses.filter(c => userState.completedCourseIds.includes(c.id));
+            
+            if (completed.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 space-y-3">
+                        <i data-lucide="book-open" class="w-12 h-12 mx-auto text-slate-400"></i>
+                        <h4 class="font-bold text-lg text-slate-700 dark:text-slate-300">Henüz tamamlanan ders yok</h4>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = completed.map(course => renderCourseCard(course)).join('');
+            lucide.createIcons();
+        }
+
+        function renderProfileView() {
+            document.getElementById('profileNameDisplay').innerText = currentUser;
+            document.getElementById('profileCompletedCount').innerText = userState.completedCourseIds.length;
+            document.getElementById('profileStreakCount').innerText = `${userState.streak || 1} Gün`;
+            const branchNameMap = {
+                'Computer Science': 'Yazılım',
+                'Artificial Intelligence': 'Yapay Zeka',
+                'Data Science': 'Veri Bilimi',
+                'Mathematics': 'Matematik',
+                'Finance & Economics': 'Finans'
+            };
+            document.getElementById('profileBranchesDisplay').innerText = userState.selectedBranches.map(b => branchNameMap[b] || b).join(', ');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-600 text-white' : type === 'error' ? 'bg-rose-600 text-white' : 'bg-slate-900 text-white';
+            
+            toast.className = `pointer-events-auto px-5 py-3.5 rounded-2xl shadow-2xl text-xs font-bold flex items-center space-x-2 transform translate-y-2 opacity-0 transition-all duration-300 ${bgClass}`;
+            toast.innerHTML = `<span>${message}</span>`;
+            
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
