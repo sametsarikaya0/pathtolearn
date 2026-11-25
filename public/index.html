@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr" class="light">
+<html lang="tr" class="light" data-palette="indigo">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,12 +12,12 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            900: '#14532d'
+                            50: 'var(--brand-50)',
+                            100: 'var(--brand-100)',
+                            500: 'var(--brand-500)',
+                            600: 'var(--brand-600)',
+                            700: 'var(--brand-700)',
+                            900: 'var(--brand-900)'
                         }
                     }
                 }
@@ -27,18 +27,99 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --brand-50: #eef2ff;
+            --brand-100: #e0e7ff;
+            --brand-500: #6366f1;
+            --brand-600: #4f46e5;
+            --brand-700: #4338ca;
+            --brand-900: #312e81;
+            --accent-2: #06b6d4;
+            --glow-1: rgba(99, 102, 241, 0.11);
+            --glow-2: rgba(6, 182, 212, 0.09);
+        }
+
+        html[data-palette="indigo"] {
+            --brand-50: #eef2ff;
+            --brand-100: #e0e7ff;
+            --brand-500: #6366f1;
+            --brand-600: #4f46e5;
+            --brand-700: #4338ca;
+            --brand-900: #312e81;
+            --accent-2: #06b6d4;
+            --glow-1: rgba(99, 102, 241, 0.12);
+            --glow-2: rgba(6, 182, 212, 0.09);
+        }
+
+        html[data-palette="rose"] {
+            --brand-50: #fff1f2;
+            --brand-100: #ffe4e6;
+            --brand-500: #f43f5e;
+            --brand-600: #e11d48;
+            --brand-700: #be123c;
+            --brand-900: #881337;
+            --accent-2: #f97316;
+            --glow-1: rgba(244, 63, 94, 0.11);
+            --glow-2: rgba(249, 115, 22, 0.09);
+        }
+
+        html[data-palette="amber"] {
+            --brand-50: #fffbeb;
+            --brand-100: #fef3c7;
+            --brand-500: #f59e0b;
+            --brand-600: #d97706;
+            --brand-700: #b45309;
+            --brand-900: #78350f;
+            --accent-2: #ec4899;
+            --glow-1: rgba(245, 158, 11, 0.12);
+            --glow-2: rgba(236, 72, 153, 0.08);
+        }
+
+        html[data-palette="ocean"] {
+            --brand-50: #f0f9ff;
+            --brand-100: #e0f2fe;
+            --brand-500: #0ea5e9;
+            --brand-600: #0284c7;
+            --brand-700: #0369a1;
+            --brand-900: #0c4a6e;
+            --accent-2: #6366f1;
+            --glow-1: rgba(14, 165, 233, 0.12);
+            --glow-2: rgba(99, 102, 241, 0.09);
+        }
+
+        html[data-palette="emerald"] {
+            --brand-50: #f0fdf4;
+            --brand-100: #dcfce7;
+            --brand-500: #22c55e;
+            --brand-600: #16a34a;
+            --brand-700: #15803d;
+            --brand-900: #14532d;
+            --accent-2: #14b8a6;
+            --glow-1: rgba(34, 197, 94, 0.10);
+            --glow-2: rgba(20, 184, 166, 0.08);
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-image: radial-gradient(circle at 15% 10%, rgba(34, 197, 94, 0.08), transparent 36%),
-                              radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.07), transparent 40%);
+            background-image: radial-gradient(circle at 15% 10%, var(--glow-1), transparent 38%),
+                              radial-gradient(circle at 85% 20%, var(--glow-2), transparent 42%);
         }
-        .dark body {
-            background-image: radial-gradient(circle at 15% 10%, rgba(34, 197, 94, 0.09), transparent 36%),
-                              radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.06), transparent 40%);
+
+        .accent-gradient {
+            background-image: linear-gradient(135deg, var(--brand-600), var(--accent-2));
         }
+
+        .title-gradient {
+            background-image: linear-gradient(90deg, var(--brand-600), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
         .smooth-ui {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
         }
+
         @keyframes viewSlideIn {
             0% { opacity: 0; transform: translateY(14px) scale(0.992); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -53,6 +134,9 @@
         .pop-enter {
             animation: popIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+        @media (prefers-reduced-motion: reduce) {
+            .view-enter, .pop-enter, .smooth-ui { animation: none !important; transition: none !important; }
+        }
         @media print {
             body * { visibility: hidden; }
             #certificateModal, #certificateModal * { visibility: visible; }
@@ -60,17 +144,27 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen smooth-ui flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-100/80 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen smooth-ui flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- AKILLI YUKARI / AŞAĞI KAYDIR BUTONLARI -->
+    <div id="scrollNavFab" class="fixed bottom-6 right-6 z-[70] flex flex-col space-y-2">
+        <button id="scrollTopBtn" onclick="scrollToTopSmooth()" title="Yukarı Kaydır" aria-label="Yukarı Kaydır" class="hidden w-11 h-11 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-brand-500 hover:text-brand-600 shadow-lg backdrop-blur-md flex items-center justify-center transition hover:scale-105">
+            <i data-lucide="arrow-up" class="w-4 h-4"></i>
+        </button>
+        <button id="scrollBottomBtn" onclick="scrollToBottomSmooth()" title="Aşağı Kaydır" aria-label="Aşağı Kaydır" class="w-11 h-11 rounded-2xl accent-gradient text-white shadow-lg flex items-center justify-center transition hover:scale-105">
+            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </button>
+    </div>
 
     <!-- Toast Bildirim -->
-    <div id="toastContainer" class="fixed bottom-6 right-6 z-[80] space-y-2.5 pointer-events-none"></div>
+    <div id="toastContainer" class="fixed bottom-32 right-6 z-[80] space-y-2.5 pointer-events-none"></div>
 
     <!-- HOŞ GELDİNİZ POPUP PENCERESİ -->
     <div id="welcomeModal" class="hidden fixed inset-0 z-[60] bg-slate-950/65 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeWelcomeModal(event)">
         <div class="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 w-full max-w-lg rounded-3xl p-7 shadow-2xl space-y-5 pop-enter" onclick="event.stopPropagation()">
             <div class="flex items-start justify-between gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-emerald-400 text-white flex items-center justify-center shadow-lg shadow-brand-500/25">
+                    <div class="w-11 h-11 rounded-2xl accent-gradient text-white flex items-center justify-center shadow-lg">
                         <i data-lucide="sparkles" class="w-5 h-5"></i>
                     </div>
                     <div>
@@ -84,7 +178,7 @@
             </div>
 
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" id="welcomeModalText">
-                4.000 derslik geniş katalog içinde ne öğrenmek istediğini yaz; hedefine uygun yol haritasını ayrı sekmede oluşturalım.
+                10.000+ derslik geniş katalog içinde ne öğrenmek istediğini yaz; hedefine, sürene ve amacına uygun yol haritasını ayrı sekmede oluşturalım.
             </p>
 
             <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
@@ -92,7 +186,7 @@
                     <input type="checkbox" id="dontShowWelcomeCheckbox" class="rounded text-brand-600 focus:ring-brand-500">
                     <span>Bir daha gösterme</span>
                 </label>
-                <button onclick="closeWelcomeModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-500 text-white text-xs font-extrabold shadow-md shadow-brand-500/20 hover:opacity-95 transition">
+                <button onclick="closeWelcomeModal()" class="px-5 py-2.5 rounded-xl accent-gradient text-white text-xs font-extrabold shadow-md hover:opacity-95 transition">
                     Keşfetmeye Başla
                 </button>
             </div>
@@ -128,7 +222,7 @@
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1.5">Şifre</label>
                     <input type="password" id="authInputPass" placeholder="Şifren" onkeydown="if(event.key==='Enter') handleAuthSubmit()" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                 </div>
-                <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-500 text-white font-extrabold text-sm shadow-lg shadow-brand-500/20 hover:opacity-95 transition">
+                <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="w-full py-3.5 rounded-xl accent-gradient text-white font-extrabold text-sm shadow-lg hover:opacity-95 transition">
                     Giriş Yap
                 </button>
             </div>
@@ -142,7 +236,7 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="space-y-2">
-                <div class="w-16 h-16 bg-brand-500 text-white rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                <div class="w-16 h-16 accent-gradient text-white rounded-2xl flex items-center justify-center mx-auto shadow-lg">
                     <i data-lucide="award" class="w-8 h-8"></i>
                 </div>
                 <h3 class="text-xs font-bold tracking-widest text-brand-600 uppercase">PathToLearn Başarı Sertifikası</h3>
@@ -164,10 +258,10 @@
     <header class="border-b border-slate-200/80 dark:border-slate-800/90 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md sticky top-0 z-40 smooth-ui">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
             <div class="flex items-center space-x-2.5 cursor-pointer shrink-0" onclick="navigateTo('home')">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                <div class="w-9 h-9 rounded-xl accent-gradient flex items-center justify-center text-white shadow-md">
                     <i data-lucide="compass" class="w-5 h-5"></i>
                 </div>
-                <span class="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-brand-600 to-emerald-500 bg-clip-text text-transparent">
+                <span class="font-extrabold text-base sm:text-lg tracking-tight title-gradient">
                     PathToLearn
                 </span>
             </div>
@@ -197,7 +291,6 @@
                     <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-brand-500"></i>
                     <span>Bitirilenler (<span id="completedCountBadge">0</span>)</span>
                 </button>
-                <!-- SADECE ADMİN HESABI GİRİŞ YAPINCA GÖRÜNÜR -->
                 <button onclick="navigateTo('admin')" data-nav="admin" id="adminNavDesktop" class="hidden nav-btn px-3 py-1.5 rounded-xl text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/70 hover:opacity-90 transition flex items-center space-x-1.5">
                     <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"></i>
                     <span>Admin</span>
@@ -209,12 +302,21 @@
             </nav>
 
             <div class="flex items-center space-x-2 shrink-0">
-                <div class="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/70 text-amber-600 dark:text-amber-400 text-xs font-extrabold">
-                    <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-500 fill-amber-500"></i>
+                <!-- Renk Teması Seçici -->
+                <select id="paletteSelect" onchange="setColorPalette(this.value)" aria-label="Renk Teması" class="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <option value="indigo">İndigo</option>
+                    <option value="ocean">Okyanus</option>
+                    <option value="rose">Mercan</option>
+                    <option value="amber">Kehribar</option>
+                    <option value="emerald">Zümrüt</option>
+                </select>
+
+                <div class="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 text-brand-700 dark:text-brand-300 text-xs font-extrabold">
+                    <i data-lucide="flame" class="w-3.5 h-3.5 text-brand-500"></i>
                     <span id="streakCountText">1g</span>
                 </div>
 
-                <button onclick="toggleTheme()" aria-label="Tema Değiştir" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:scale-105 transition">
+                <button onclick="toggleTheme()" aria-label="Açık Koyu Mod" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:scale-105 transition">
                     <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
                     <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
                 </button>
@@ -255,7 +357,6 @@
             <button onclick="navigateTo('completed')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 whitespace-nowrap flex items-center space-x-1">
                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-brand-500"></i><span>Bitirilenler</span>
             </button>
-            <!-- SADECE ADMİN HESABI GİRİŞ YAPINCA GÖRÜNÜR -->
             <button onclick="navigateTo('admin')" id="adminNavMobile" class="hidden px-2.5 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 whitespace-nowrap flex items-center space-x-1">
                 <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i><span>Admin</span>
             </button>
@@ -275,13 +376,13 @@
                     <div class="space-y-2.5">
                         <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-[11px] font-extrabold uppercase tracking-wider">
                             <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-                            <span>4.000 Derslik Akıllı Rota Motoru</span>
+                            <span>10.000+ Derslik Akıllı Rota Motoru</span>
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white" id="homeHeroTitle">
                             PathToLearn Nedir, Ne Yapar?
                         </h2>
                         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed" id="homeHeroDesc">
-                            PathToLearn, 4.000 derslik zengin katalog içinde yazdığın cümleyi analiz eder; hedefini ve seviyeni anlayarak sana özel bir öğrenme yol haritası oluşturur ve ayrı bir sekmede sunar.
+                            PathToLearn, 10.000+ derslik katalog içinde yazdığın cümleden branşı, seviyeyi, hedef süreyi ve destek alanları analiz ederek sana özel yol haritası oluşturur ve ayrı bir sekmede sunar.
                         </p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5 pt-1">
@@ -298,18 +399,18 @@
                 </div>
 
                 <!-- Günlük Öneri Kutusu -->
-                <div class="bg-gradient-to-br from-brand-600 to-emerald-600 text-white rounded-3xl p-6 sm:p-7 shadow-lg shadow-brand-600/20 flex flex-col justify-between space-y-5">
+                <div class="accent-gradient text-white rounded-3xl p-6 sm:p-7 shadow-lg flex flex-col justify-between space-y-5">
                     <div class="space-y-2.5">
                         <div class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-white/15 text-white text-[11px] font-extrabold uppercase">
                             <i data-lucide="sun" class="w-3.5 h-3.5"></i>
                             <span>Günlük Öneri</span>
                         </div>
                         <h3 class="text-lg font-extrabold leading-snug" id="dailyTipTitle">Para Yönetimi ve Odak Çalışması</h3>
-                        <p class="text-xs text-emerald-50/95 leading-relaxed" id="dailyTipBody">
-                            Bugün 25 dakikalık odak seansı yap; bütçe veya seçtiğin alandaki ilk adımı tamamla.
+                        <p class="text-xs text-white/90 leading-relaxed" id="dailyTipBody">
+                            Bugün 25 dakikalık odak seansı yap; bütçe veya seçtiğin branştaki ilk adımı tamamla.
                         </p>
                     </div>
-                    <button onclick="applyDailySuggestion()" class="w-full py-2.5 rounded-xl bg-white text-brand-700 hover:bg-emerald-50 text-xs font-extrabold transition flex items-center justify-center space-x-1.5 shadow-sm">
+                    <button onclick="applyDailySuggestion()" class="w-full py-2.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 text-xs font-extrabold transition flex items-center justify-center space-x-1.5 shadow-sm">
                         <span>Öneriyi Yol Haritasına Taşı</span>
                         <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
                     </button>
@@ -324,7 +425,7 @@
                         <span>Hedef Cümleni Yaz, Yol Haritan Ayrı Sekmede Açılsın</span>
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                        Örneğin: <em>"başlangıç seviye bir oyun tasarlamak istiyorum"</em> veya <em>"python öğrenmek istiyorum"</em>.
+                        İpucu: Cümleye süre veya amaç da ekleyebilirsin. Örneğin: <em>"hızlı bir şekilde oyun tasarlamak istiyorum ama müzik de lazım"</em>, <em>"tarih ve medeniyetler"</em>, <em>"resim çizim teknikleri"</em> veya <em>"psikoloji temelleri"</em>.
                     </p>
                 </div>
 
@@ -339,7 +440,7 @@
                         >
                         <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5"></i>
                     </div>
-                    <button onclick="createRoadmapInTab()" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-brand-600 to-emerald-500 hover:opacity-95 text-white text-sm font-extrabold transition shadow-lg shadow-brand-500/20 flex items-center justify-center space-x-2 shrink-0">
+                    <button onclick="createRoadmapInTab()" class="px-6 py-3.5 rounded-2xl accent-gradient hover:opacity-95 text-white text-sm font-extrabold transition shadow-lg flex items-center justify-center space-x-2 shrink-0">
                         <span>Yol Haritası Sekmesinde Aç</span>
                         <i data-lucide="external-link" class="w-4 h-4"></i>
                     </button>
@@ -347,9 +448,13 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1.5">Geniş Alan Filtresi</label>
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1.5">Geniş Branş Filtresi</label>
                         <select id="filterDomainSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-500">
                             <option value="Auto">Cümleden Otomatik Anla</option>
+                            <option value="History">Tarih</option>
+                            <option value="Music">Müzik</option>
+                            <option value="Art">Resim & Görsel Sanatlar</option>
+                            <option value="Psychology">Psikoloji</option>
                             <option value="Game">Oyun Tasarımı & Geliştirme</option>
                             <option value="Python">Python & Yazılım Geliştirme</option>
                             <option value="AI">Yapay Zeka & Makine Öğrenmesi</option>
@@ -376,7 +481,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1.5">Odak Anahtar Kelime</label>
-                        <input type="text" id="filterKeywordInput" placeholder="Örn: oyun, bütçe, sinir ağı, web..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <input type="text" id="filterKeywordInput" placeholder="Örn: tarih, nota, karakalem, bilişsel, oyun..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
                 </div>
 
@@ -427,15 +532,38 @@
                     <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400" id="roadmapTabSubtitle">Cümleden analiz edilerek oluşturulan ders sırası</p>
                 </div>
 
-                <div class="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 min-w-[250px]">
-                    <div class="flex justify-between text-xs font-bold mb-1.5">
-                        <span>Bu Haritadaki İlerleme</span>
-                        <span id="roadmapProgressText">0%</span>
-                    </div>
-                    <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                        <div id="roadmapProgressBar" class="bg-brand-500 h-full w-0 transition-all duration-500"></div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button onclick="loadMoreRoadmapCourses()" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-extrabold transition shadow-sm flex items-center space-x-1.5">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        <span>+6 Ek Ders Daha Göster</span>
+                    </button>
+
+                    <button onclick="exportRoadmapMarkdown()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-extrabold transition flex items-center space-x-1.5">
+                        <i data-lucide="download" class="w-3.5 h-3.5 text-brand-500"></i>
+                        <span>.MD İndir</span>
+                    </button>
+
+                    <div class="bg-slate-100 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 min-w-[210px]">
+                        <div class="flex justify-between text-xs font-bold mb-1.5">
+                            <span>Bu Haritadaki İlerleme</span>
+                            <span id="roadmapProgressText">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                            <div id="roadmapProgressBar" class="bg-brand-500 h-full w-0 transition-all duration-500"></div>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Yol Haritası İçi Hızlı Filtre -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+                <input type="text" id="roadmapQuickSearch" oninput="renderRoadmapTab()" placeholder="Bu yol haritası içindeki derslerde ara (başlık, eğitmen, not)..." class="flex-grow px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <select id="roadmapLevelFilter" onchange="renderRoadmapTab()" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold">
+                    <option value="ALL">Tüm Seviyeler</option>
+                    <option value="Beginner">Başlangıç</option>
+                    <option value="Intermediate">Orta</option>
+                    <option value="Advanced">İleri</option>
+                </select>
             </div>
 
             <div class="space-y-8" id="roadmapTabStages"></div>
@@ -446,7 +574,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Önerilen Yollar</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Farklı alanlar için hazırlanan rehber yol özeti (seçim yapılmadan inceleme ekranı).</p>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Farklı branşlar için hazırlanan rehber yol özeti.</p>
                 </div>
                 <button onclick="navigateTo('home')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold hover:opacity-90 transition flex items-center space-x-1.5">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i><span>Ana Sayfaya Dön</span>
@@ -474,7 +602,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Önerilen Dersler</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Para Yönetimi, Teknoloji 101 ve diğer popüler ders seçenekleri.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Tarih, Müzik, Resim, Psikoloji, Para Yönetimi ve Teknoloji 101 derslerinden seçkiler.</p>
                 </div>
                 <button onclick="navigateTo('home')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold hover:opacity-90 transition flex items-center space-x-1.5">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i><span>Ana Sayfaya Dön</span>
@@ -502,12 +630,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="completedCoursesContainer"></div>
         </section>
 
-        <!-- 7. GENİŞLETİLMİŞ ADMİN PANELİ (SADECE ADMİN GİRİŞİ İLE ERİŞİLEBİLİR) -->
+        <!-- 7. GENİŞLETİLMİŞ ADMİN PANELİ -->
         <section id="viewAdmin" class="hidden space-y-6 view-enter">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Admin Yönetim Merkezi</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Kod değiştirmeden ana sayfa metinlerini, hazır cümleleri, dersleri ve yorumları yönet.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Ana sayfa metinlerini, hazır cümleleri, kalıcı özel dersleri ve yorumları yönet.</p>
                 </div>
                 <button onclick="navigateTo('home')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold hover:opacity-90 transition flex items-center space-x-1.5">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i><span>Ana Sayfaya Dön</span>
@@ -515,7 +643,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Ana Sayfa, Günlük Öneri ve Hoş Geldiniz Metinleri -->
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
                     <h3 class="font-extrabold text-base text-slate-900 dark:text-white flex items-center space-x-2">
                         <i data-lucide="layout-template" class="w-4 h-4 text-brand-500"></i>
@@ -553,7 +680,6 @@
                     </div>
                 </div>
 
-                <!-- Hızlı Başlangıç Cümleleri Düzenleme -->
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
                     <h3 class="font-extrabold text-base text-slate-900 dark:text-white flex items-center space-x-2">
                         <i data-lucide="zap" class="w-4 h-4 text-brand-500"></i>
@@ -572,11 +698,15 @@
                     <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3 text-xs">
                         <h4 class="font-extrabold text-sm text-slate-900 dark:text-white flex items-center space-x-2">
                             <i data-lucide="plus-circle" class="w-4 h-4 text-brand-500"></i>
-                            <span>Kataloga Yeni Ders Ekle</span>
+                            <span>Kataloga Kalıcı Yeni Ders Ekle</span>
                         </h4>
                         <input type="text" id="adminCourseTitle" placeholder="Ders adı" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
                         <div class="grid grid-cols-2 gap-3">
                             <select id="adminCourseDomain" class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
+                                <option value="History">Tarih</option>
+                                <option value="Music">Müzik</option>
+                                <option value="Art">Resim</option>
+                                <option value="Psychology">Psikoloji</option>
                                 <option value="Game">Oyun Tasarımı</option>
                                 <option value="Python">Python & Yazılım</option>
                                 <option value="Finance">Para Yönetimi</option>
@@ -594,13 +724,12 @@
                         </div>
                         <input type="text" id="adminCourseInstructor" placeholder="Eğitmen adı" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
                         <button onclick="addAdminCustomCourse()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-extrabold transition">
-                            Dersi Havuza Ekle
+                            Dersi Havuza Kalıcı Ekle
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Admin Yorum Moderasyonu ve Sıfırlama -->
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <h3 class="font-extrabold text-base text-slate-900 dark:text-white flex items-center space-x-2">
@@ -659,6 +788,19 @@
                     <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Son Aranan Hedefler</h4>
                     <div id="profileRecentGoals" class="flex flex-wrap gap-2"></div>
                 </div>
+
+                <!-- Yedekle / Geri Yükle -->
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-2.5">
+                    <button onclick="exportUserBackupJSON()" class="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-brand-600 text-white text-xs font-bold transition flex items-center space-x-1.5">
+                        <i data-lucide="hard-drive-download" class="w-3.5 h-3.5"></i>
+                        <span>İlerleme & Notları Yedekle (.JSON)</span>
+                    </button>
+                    <label class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition cursor-pointer flex items-center space-x-1.5">
+                        <i data-lucide="hard-drive-upload" class="w-3.5 h-3.5 text-brand-500"></i>
+                        <span>Yedek Geri Yükle</span>
+                        <input type="file" accept=".json" onchange="importUserBackupJSON(event)" class="hidden">
+                    </label>
+                </div>
             </div>
         </section>
 
@@ -682,9 +824,9 @@
                     </h3>
                     <ol class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 list-decimal list-inside">
                         <li>Ana sayfadaki arama çubuğuna öğrenmek istediğini cümle olarak yaz ve <strong>Enter</strong>'a bas.</li>
-                        <li>Sistem cümledeki konu ve seviyeyi anlar, yol haritasını <strong>Yol Haritası</strong> sekmesinde açar.</li>
-                        <li>İstersen alan, seviye veya anahtar kelime filtresiyle sonuçları daralt.</li>
-                        <li>Topluluk bölümünden kalıcı öneriler bırakabilir, tamamladığın derslerle ilerlemeni takip edebilirsin.</li>
+                        <li>Yol haritası sekmesinde ders kartlarına kişisel not yazabilir veya <strong>Alternatif</strong> butonuyla dersi değiştirebilirsin.</li>
+                        <li><strong>+6 Ek Ders Daha Göster</strong> ile haritayı genişletebilir, <strong>.MD İndir</strong> ile planını dışa aktarabilirsin.</li>
+                        <li>Profil sekmesinden ilerleme ve notlarını <strong>.JSON</strong> olarak yedekleyebilirsin.</li>
                     </ol>
                 </div>
 
@@ -694,7 +836,7 @@
                         <span>Hakkında</span>
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                        PathToLearn, 4.000 derslik katalogu doğal dil ipuçlarıyla eşleştirerek kişiselleştirilmiş öğrenme rotaları oluşturan sade ve hızlı bir eğitim planlama uygulamasıdır.
+                        PathToLearn, 10.000+ derslik katalogu doğal dil ipuçları, hedef süre/amaç algılama ve kişisel not/alternatif ders araçlarıyla birleştiren hızlı öğrenme planlama platformudur.
                     </p>
                 </div>
 
@@ -705,8 +847,8 @@
                     </h3>
                     <div class="space-y-2.5 text-xs sm:text-sm">
                         <div>
-                            <div class="font-bold text-slate-900 dark:text-white">Yorumlar sekmeyi kapatınca silinir mi?</div>
-                            <p class="text-slate-500 dark:text-slate-400">Hayır, yorumlar tarayıcı depolamasında kalıcı olarak tutulur.</p>
+                            <div class="font-bold text-slate-900 dark:text-white">Ders notları ve admin dersleri kalıcı mı?</div>
+                            <p class="text-slate-500 dark:text-slate-400">Evet, tarayıcı depolamasında saklanır ve istersen JSON yedeği alabilirsin.</p>
                         </div>
                         <div>
                             <div class="font-bold text-slate-900 dark:text-white">Admin paneli herkese açık mı?</div>
@@ -734,63 +876,76 @@
     <!-- Footer -->
     <footer class="border-t border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 py-6 mt-12 smooth-ui">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
-            <div>PathToLearn &copy; 2026 — 4.000 Derslik Kişisel Yol Haritası Platformu</div>
+            <div>PathToLearn &copy; 2026 — 10.000+ Derslik Kişisel Yol Haritası Platformu</div>
             <div class="flex items-center space-x-5 font-semibold">
                 <button onclick="navigateTo('help')" class="hover:underline">Yardım</button>
-                <span onclick="alert('Çerezler (Cookies): Tema, oturum, yorumlar ve ilerleme verilerinizi saklamak için kullanılır.')" class="cursor-pointer hover:underline">Çerezler</span>
+                <span onclick="alert('Çerezler (Cookies): Tema, oturum, notlar, yorumlar ve ilerleme verilerinizi saklamak için kullanılır.')" class="cursor-pointer hover:underline">Çerezler</span>
             </div>
         </div>
     </footer>
 
     <script>
-        // GENİŞ ALAN YELPAZESİ + 4.000 DERSLİK HAVUZ
         const domainCatalog = [
-            { id: 'Game', label: 'Oyun Tasarımı', keywords: ['oyun', 'game', 'mekanik', 'level', 'sahne', 'karakter', 'tasarım'], courses: ['Oyun Tasarımı Temelleri ve Mekanikler', '2D Sahne Akışı ve Karakter Hareketi', 'Oyun Döngüsü, Fizik ve Çarpışma', 'Level Tasarımı ve Oyuncu Deneyimi', 'Oyun Ses, Arayüz ve Prototipleme'] },
-            { id: 'Python', label: 'Python & Yazılım', keywords: ['python', 'yazılım', 'kod', 'programlama', 'script', 'fonksiyon'], courses: ['Python Temelleri ve Değişkenler', 'Koşullar, Döngüler ve Fonksiyonlar', 'Listeler, Sözlükler ve Veri Yapıları', 'Modüller, Dosya İşlemleri ve Hata Yönetimi', 'Uygulamalı Python Mini Projeleri'] },
-            { id: 'AI', label: 'Yapay Zeka', keywords: ['yapay zeka', 'ai', 'makine öğrenmesi', 'model', 'sinir ağı', 'derin öğrenme'], courses: ['Yapay Zeka Kavramlarına Giriş', 'Veriden Öğrenme ve Temel Modeller', 'Sınıflandırma ve Tahmin Mantığı', 'Sinir Ağlarının Çalışma Prensibi', 'Günlük Senaryolarla Uygulamalı AI'] },
-            { id: 'Data', label: 'Veri Bilimi', keywords: ['veri', 'analitik', 'istatistik', 'grafik', 'tablo', 'rapor'], courses: ['Veri Okuryazarlığı ve Temizleme', 'Keşifsel Veri Analizi ve Görselleştirme', 'Temel İstatistik ve Olasılık', 'Veri Setlerinden Anlam Çıkarma', 'Karar Destek İçin Veri Raporlama'] },
-            { id: 'Finance', label: 'Para Yönetimi', keywords: ['para', 'finans', 'bütçe', 'yatırım', 'birikim', 'tasarruf', 'ekonomi'], courses: ['Para Yönetimi 101: Bütçe ve Nakit Akışı', 'Tasarruf Alışkanlıkları ve Acil Durum Fonu', 'Bileşik Faiz, Enflasyon ve Risk', 'Temel Yatırım Araçları ve Portföy Mantığı', 'Kişisel Finansal Planlama Adımları'] },
-            { id: 'Tech', label: 'Teknoloji 101', keywords: ['teknoloji', '101', 'dijital', 'bilgisayar', 'internet', 'bulut', 'güvenlik'], courses: ['Teknoloji 101: Bilgisayarlar Nasıl Çalışır?', 'İnternet, Tarayıcılar ve Ağ Temelleri', 'Bulut Araçları ve Dijital Çalışma Düzeni', 'Dijital Güvenlik, Parola ve Gizlilik', 'Güncel Teknolojileri Anlama Rehberi'] },
-            { id: 'Math', label: 'Matematik', keywords: ['matematik', 'cebirsel', 'mantık', 'olasılık', 'algoritma', 'geometri'], courses: ['Uygulamalı Matematik ve Mantık Temelleri', 'Fonksiyonlar, Oranlar ve Grafik Okuma', 'Olasılık ve Kombinatoryal Düşünme', 'Algoritmik Problem Çözme Matematiği', 'Matematiksel Modellemeye Giriş'] },
-            { id: 'Engineering', label: 'Mühendislik', keywords: ['mühendislik', 'sistem', 'donanım', 'sensör', 'enerji', 'süreç'], courses: ['Mühendislik Tasarım Süreci ve Problemler', 'Sistem Düşüncesi ve Bileşen Analizi', 'Elektronik ve Sensör Mantığına Giriş', 'Test, Kalibrasyon ve Hata Ayıklama', 'Prototipten Üretime Mühendislik Adımları'] },
-            { id: 'Design', label: 'Tasarım', keywords: ['arayüz', 'ui', 'ux', 'görsel', 'renk', 'tipografi', 'tasarım'], courses: ['Görsel Tasarım İlkeleri ve Kompozisyon', 'Kullanıcı Deneyimi (UX) ve Akış Tasarımı', 'Arayüz (UI) Bileşenleri ve Hiyerarşi', 'Renk, Tipografi ve Erişilebilirlik', 'Etkileşimli Prototip Hazırlama'] },
-            { id: 'Business', label: 'İş & Girişim', keywords: ['iş', 'girişim', 'ürün', 'pazar', 'müşteri', 'strateji', 'yönetim'], courses: ['İş Modeli ve Değer Önerisi Temelleri', 'Kullanıcı İhtiyacı ve Ürün Geliştirme', 'Temel Pazar Analizi ve Konumlandırma', 'Proje Planlama ve Hedef Takibi', 'Sunum ve İletişim Becerileri'] },
-            { id: 'Productivity', label: 'Verimlilik', keywords: ['verimlilik', 'odak', 'zaman', 'öğrenme', 'alışkanlık', 'plan'], courses: ['Etkili Öğrenme ve Aralıklı Tekrar', 'Zaman Yönetimi ve Önceliklendirme', 'Dikkat Dağınıklığını Azaltma Teknikleri', 'Alışkanlık Döngüsü ve Süreklilik', 'Kişisel Çalışma Sistemi Kurma'] }
+            { id: 'History', label: 'Tarih', keywords: ['tarih', 'medeniyet', 'antik', 'osmanlı', 'cumhuriyet', 'savaş', 'çağ', 'imparatorluk', 'arkeoloji'], topics: ['Kadim Medeniyetler ve Kent Kültürü', 'Anadolu ve Yakın Doğu Kronolojisi', 'Ticaret Yolları ve Kültürel Etkileşim', 'Modern Çağın Doğuşu ve Siyasi Dönüşümler', 'Birincil Kaynaklarla Tarih Okuması'] },
+            { id: 'Music', label: 'Müzik', keywords: ['müzik', 'nota', 'ritim', 'akort', 'armoni', 'melodi', 'enstrüman', 'piyano', 'gitar', 'solfej'], topics: ['Nota Okuma ve Ölçü/Ritim Kalıpları', 'Solfej, Aralıklar ve Kulak Eğitimi', 'Majör/Minör Diziler ve Akor Kurma', 'Ezgi Yazımı ve Armonik Eşlik', 'Müzik Türleri ve Ses Kayıt Temelleri'] },
+            { id: 'Art', label: 'Resim', keywords: ['resim', 'çizim', 'karakalem', 'suluboya', 'yağlı boya', 'perspektif', 'kompozisyon', 'renk', 'sanat'], topics: ['Karakalemde Çizgi, Oran ve Tonlama', 'Tek ve Çift Kaçışlı Perspektif', 'Işık, Gölge ve Hacim Modelleme', 'Renk Teorisi ve Boya Teknikleri', 'Kompozisyon, Odak Noktası ve Görsel Anlatım'] },
+            { id: 'Psychology', label: 'Psikoloji', keywords: ['psikoloji', 'zihin', 'davranış', 'duygu', 'bilişsel', 'hafıza', 'motivasyon', 'stres', 'algı', 'gelişim'], topics: ['Davranış ve Zihin Temelleri', 'Dikkat, Çalışma Belleği ve Öğrenme', 'Duygu Düzenleme, Motivasyon ve Stres', 'İnsan Gelişimi ve İletişim Kalıpları', 'Bilişsel Önyargılar ve Karar Verme'] },
+            { id: 'Game', label: 'Oyun Tasarımı', keywords: ['oyun', 'game', 'mekanik', 'level', 'sahne', 'karakter'], topics: ['Çekirdek Mekanikler ve Geri Bildirim Döngüsü', '2D Sahne Akışı ve Karakter Kontrolü', 'Fizik, Çarpışma ve Zorluk Eğrisi', 'Level Tasarımı ve Rehberlik Tasarımı', 'Hızlı Prototipleme ve Oyuncu Testi'] },
+            { id: 'Python', label: 'Python & Yazılım', keywords: ['python', 'yazılım', 'kod', 'programlama', 'script', 'fonksiyon'], topics: ['Değişkenler, Tipler ve Girdi/Çıktı', 'Koşullar, Döngüler ve Yeniden Kullanılabilir Fonksiyonlar', 'Listeler, Sözlükler ve Modüler Yapı', 'Dosya İşlemleri ve Hata Yakalama', 'Otomasyon ve Mini Uygulama Geliştirme'] },
+            { id: 'AI', label: 'Yapay Zeka', keywords: ['yapay zeka', 'ai', 'makine öğrenmesi', 'model', 'sinir ağı', 'derin öğrenme'], topics: ['Yapay Zeka Kavram Haritası ve Kullanım Alanları', 'Eğitim Verisi, Özellik ve Model Mantığı', 'Sınıflandırma, Regresyon ve Değerlendirme', 'Yapay Sinir Ağları ve Katmanlı Öğrenme', 'Güvenli ve Pratik Yapay Zeka Uygulamaları'] },
+            { id: 'Data', label: 'Veri Bilimi', keywords: ['veri', 'analitik', 'istatistik', 'grafik', 'tablo', 'rapor'], topics: ['Ham Veriyi Anlama ve Temizleme Adımları', 'Dağılımlar, Ortalama ve Değişkenlik', 'Doğru Grafik Seçimi ve Görselleştirme', 'Korelasyon ve Trend Analizi', 'Bulguları Net ve Görsel Rapora Dönüştürme'] },
+            { id: 'Finance', label: 'Para Yönetimi', keywords: ['para', 'finans', 'bütçe', 'yatırım', 'birikim', 'tasarruf', 'ekonomi'], topics: ['Aylık Nakit Akışı ve 50/30/20 Bütçe Planı', 'Acil Durum Fonu ve Sabit Gider Optimizasyonu', 'Bileşik Getiri, Enflasyon ve Risk Kavramı', 'Temel Yatırım Araçları ve Çeşitlendirme', 'Kısa ve Orta Vadeli Finansal Hedef Planı'] },
+            { id: 'Tech', label: 'Teknoloji 101', keywords: ['teknoloji', '101', 'dijital', 'bilgisayar', 'internet', 'bulut', 'güvenlik'], topics: ['İşlemci, Bellek ve Depolama Nasıl Çalışır?', 'İnternet Adresleme, DNS ve Tarayıcı Akışı', 'Bulut Depolama ve Senkronizasyon', 'Kimlik Doğrulama, Parola ve Gizlilik', 'Dijital Araçlarla Kişisel Sistem Kurma'] },
+            { id: 'Math', label: 'Matematik', keywords: ['matematik', 'cebirsel', 'mantık', 'olasılık', 'algoritma', 'geometri'], topics: ['Önermeler Mantığı ve İspat Düşüncesi', 'Fonksiyonlar, Oranlar ve Eğimler', 'Olasılık Uzayı ve Beklenen Değer', 'Sayma Teknikleri ve Kombinatorik', 'Algoritmik Karmaşıklık ve Problem Modelleme'] },
+            { id: 'Engineering', label: 'Mühendislik', keywords: ['mühendislik', 'sistem', 'donanım', 'sensör', 'enerji', 'süreç'], topics: ['Gereksinim Analizi ve Mühendislik Kısıtları', 'Alt Sistemlere Ayırma ve Arayüz Tasarımı', 'Sensör Okuma, Sinyal ve Geri Besleme', 'Ölçüm, Tolerans ve Hata Analizi', 'İteratif Test ve Güvenilirlik İyileştirme'] },
+            { id: 'Design', label: 'Tasarım', keywords: ['arayüz', 'ui', 'ux', 'görsel', 'tipografi', 'tasarım'], topics: ['Görsel Hiyerarşi, Boşluk ve Hizalama', 'Kullanıcı Yolculuğu ve Görev Akışları', 'Bileşen Tutarlılığı ve Etkileşim Durumları', 'Tipografi, Renk Kontrastı ve Okunabilirlik', 'Tıklanabilir Prototip ve Kullanılabilirlik Notları'] },
+            { id: 'Business', label: 'İş & Girişim', keywords: ['iş', 'girişim', 'ürün', 'pazar', 'müşteri', 'strateji', 'yönetim'], topics: ['Problem Tespiti ve Hedef Kullanıcı Tanımı', 'Değer Önerisi ve MVP Kapsamı Belirleme', 'Rakip Analizi ve Farklılaşma Noktası', 'Haftalık Hedefler ve Çıktı Takibi', 'Kısa ve Etkili Ürün Sunumu Hazırlama'] },
+            { id: 'Productivity', label: 'Verimlilik', keywords: ['verimlilik', 'odak', 'zaman', 'öğrenme', 'alışkanlık', 'plan'], topics: ['Aralıklı Tekrar ve Aktif Hatırlama', 'Zaman Bloklama ve Öncelik Matrisi', 'Dikkat Dağıtıcıları Azaltma ve Derin Odak', 'Tetikleyici-Rutini-Ödül Alışkanlık Döngüsü', 'Haftalık Değerlendirme ve Sürdürülebilir Tempo'] }
         ];
 
         const levelsOrder = ['Beginner', 'Intermediate', 'Advanced'];
         const levelTrMap = { 'Beginner': 'Başlangıç', 'Intermediate': 'Orta', 'Advanced': 'İleri' };
         const instructorsPool = ['Dr. Deniz Kaya', 'Prof. Selin Aksoy', 'Mert Demir', 'Prof. Hannah Cho', 'Dr. Emre Yurt', 'PathToLearn Akademi'];
 
+        function loadCustomCourses() {
+            return JSON.parse(localStorage.getItem('ptl_custom_courses_v5') || '[]');
+        }
+
+        function saveCustomCourses(list) {
+            localStorage.setItem('ptl_custom_courses_v5', JSON.stringify(list));
+        }
+
         let allCourses = [];
 
-        function build4000CoursePool() {
-            allCourses = [];
-            for (let i = 1; i <= 4000; i++) {
+        function build10000CoursePool() {
+            const custom = loadCustomCourses();
+            const generated = [];
+            for (let i = 1; i <= 10000; i++) {
                 const dom = domainCatalog[(i - 1) % domainCatalog.length];
-                const baseTitle = dom.courses[Math.floor((i - 1) / domainCatalog.length) % dom.courses.length];
+                const topic = dom.topics[Math.floor((i - 1) / domainCatalog.length) % dom.topics.length];
                 const lvl = levelsOrder[(i - 1) % levelsOrder.length];
                 const inst = instructorsPool[i % instructorsPool.length];
+                const weeks = 2 + ((i * 3) % 7);
 
-                allCourses.push({
-                    id: `CRS-${i.toString().padStart(4, '0')}`,
-                    code: `${dom.id.slice(0, 3).toUpperCase()}-${1000 + i}`,
-                    title: `${baseTitle} (${levelTrMap[lvl]} #${i})`,
+                generated.push({
+                    id: `CRS-${i.toString().padStart(5, '0')}`,
+                    code: `${dom.id.slice(0, 3).toUpperCase()}-${10000 + i}`,
+                    title: `${topic} — Modül ${((i - 1) % 25) + 1}`,
                     domain: dom.id,
                     domainLabel: dom.label,
                     level: lvl,
                     levelLabel: levelTrMap[lvl],
                     instructor: inst,
-                    duration: `${3 + (i % 7)} Hafta`,
-                    description: `${dom.label} alanında ${levelTrMap[lvl].toLowerCase()} seviyesinde adım adım pratik beceri kazandıran ders.`,
-                    searchUrl: `https://ocw.mit.edu/search/?q=${encodeURIComponent(baseTitle + ' ' + dom.label)}`
+                    duration: `${weeks} Hafta`,
+                    description: `${dom.label} alanında ${levelTrMap[lvl].toLowerCase()} seviyesinde "${topic}" odağında uygulamalı çalışma.`,
+                    searchUrl: `https://ocw.mit.edu/search/?q=${encodeURIComponent(topic + ' ' + dom.label)}`
                 });
             }
+            allCourses = [...custom, ...generated];
         }
 
-        build4000CoursePool();
+        build10000CoursePool();
 
-        // ADMİN KİMLİK BİLGİSİ (Varsayılan: admin / 1234 — istersen değiştir)
         const ADMIN_CREDENTIALS = {
             username: 'admin',
             password: '1234'
@@ -798,47 +953,45 @@
 
         const DEFAULT_SITE_SETTINGS = {
             heroTitle: 'PathToLearn Nedir, Ne Yapar?',
-            heroDesc: 'PathToLearn, 4.000 derslik zengin katalog içinde yazdığın cümleyi analiz eder; hedefini ve seviyeni anlayarak sana özel bir öğrenme yol haritası oluşturur ve ayrı bir sekmede sunar.',
+            heroDesc: 'PathToLearn, 10.000+ derslik katalog içinde yazdığın cümleden branşı, seviyeyi, hedef süreyi ve destek alanları analiz ederek sana özel yol haritası oluşturur ve ayrı bir sekmede sunar.',
             dailyTitle: 'Para Yönetimi ve Odak Çalışması',
-            dailyBody: 'Bugün 25 dakikalık odak seansı yap; bütçe veya seçtiğin alandaki ilk adımı tamamla.',
+            dailyBody: 'Bugün 25 dakikalık odak seansı yap; bütçe veya seçtiğin branştaki ilk adımı tamamla.',
             welcomeTitle: "PathToLearn'e Hoş Geldin!",
-            welcomeText: '4.000 derslik katalog içinde ne öğrenmek istediğini yaz; yol haritanı ayrı sekmede oluşturalım.',
+            welcomeText: '10.000+ derslik katalog içinde ne öğrenmek istediğini yaz; yol haritanı ayrı sekmede oluşturalım.',
             hideWelcome: false,
             quickChips: [
-                'başlangıç seviye bir oyun tasarlamak istiyorum',
-                'python öğrenmek istiyorum',
-                'para yönetimi ve bütçe planlama',
-                'teknoloji 101 temel kavramlar'
+                'hızlı bir şekilde oyun tasarlamak istiyorum ama müzik de lazım',
+                'tarih ve medeniyetler hakkında öğrenmek istiyorum',
+                'resim çizim ve perspektif öğrenmek istiyorum',
+                'psikoloji ve bilişsel süreçleri öğrenmek istiyorum'
             ]
         };
 
         function loadSiteSettings() {
-            const saved = JSON.parse(localStorage.getItem('ptl_site_settings_v2') || 'null');
+            const saved = JSON.parse(localStorage.getItem('ptl_site_settings_v5') || 'null');
             return { ...DEFAULT_SITE_SETTINGS, ...(saved || {}) };
         }
 
         let siteSettings = loadSiteSettings();
 
         function saveSiteSettings() {
-            localStorage.setItem('ptl_site_settings_v2', JSON.stringify(siteSettings));
+            localStorage.setItem('ptl_site_settings_v5', JSON.stringify(siteSettings));
         }
 
-        // KALICI YORUMLAR
         function loadComments() {
-            const saved = JSON.parse(localStorage.getItem('ptl_community_comments_v2') || 'null');
+            const saved = JSON.parse(localStorage.getItem('ptl_community_comments_v5') || 'null');
             if (saved && Array.isArray(saved)) return saved;
             const initial = [
-                { id: 1, author: 'Zeynep', text: 'Başlangıç seviye oyun tasarımı cümlesi çok net yol haritası çıkardı.', date: 'Bugün' },
-                { id: 2, author: 'Kaan', text: 'Para yönetimi ve Teknoloji 101 dersleri sıfırdan başlayanlar için harika.', date: 'Dün' }
+                { id: 1, author: 'Zeynep', text: 'Ders kartlarına kişisel not yazabilmek ve alternatif ders getirmek çok işlevsel.', date: 'Bugün' },
+                { id: 2, author: 'Kaan', text: 'Cümledeki destek branşı ve süre ipuçlarını yakalaması yol haritasını daha anlamlı yapıyor.', date: 'Dün' }
             ];
-            localStorage.setItem('ptl_community_comments_v2', JSON.stringify(initial));
+            localStorage.setItem('ptl_community_comments_v5', JSON.stringify(initial));
             return initial;
         }
 
         let communityComments = loadComments();
 
-        // KULLANICI DURUMU
-        let currentUser = localStorage.getItem('ptl_active_user_v2') || null;
+        let currentUser = localStorage.getItem('ptl_active_user_v5') || null;
         let authMode = 'login';
 
         function isAdminLoggedIn() {
@@ -846,20 +999,25 @@
         }
 
         function getDefaultState() {
-            const firstMap = createRoadmapData('başlangıç seviye bir oyun tasarlamak istiyorum', 'Game', 'Beginner', '');
+            const firstMap = createRoadmapData('tarih ve medeniyetler hakkında öğrenmek istiyorum', 'History', 'Beginner', '', 12);
             return {
                 completedCourseIds: [],
+                courseNotes: {},
                 streak: 1,
                 lastVisit: new Date().toDateString(),
-                recentGoals: ['başlangıç seviye bir oyun tasarlamak istiyorum'],
+                recentGoals: ['tarih ve medeniyetler hakkında öğrenmek istiyorum'],
                 activeRoadmap: firstMap
             };
         }
 
         function loadUserState() {
-            const key = currentUser ? `ptl_state_v2_${currentUser}` : 'ptl_guest_state_v2';
+            const key = currentUser ? `ptl_state_v5_${currentUser}` : 'ptl_guest_state_v5';
             const raw = localStorage.getItem(key);
             let st = raw ? JSON.parse(raw) : getDefaultState();
+
+            if (!st.courseNotes || typeof st.courseNotes !== 'object') {
+                st.courseNotes = {};
+            }
 
             const today = new Date().toDateString();
             if (st.lastVisit !== today) {
@@ -872,7 +1030,7 @@
             }
 
             if (!st.activeRoadmap || !st.activeRoadmap.courses || !st.activeRoadmap.courses.length) {
-                st.activeRoadmap = createRoadmapData('başlangıç seviye bir oyun tasarlamak istiyorum', 'Game', 'Beginner', '');
+                st.activeRoadmap = createRoadmapData('tarih ve medeniyetler hakkında öğrenmek istiyorum', 'History', 'Beginner', '', 12);
             }
             return st;
         }
@@ -880,18 +1038,66 @@
         let userState = loadUserState();
 
         function saveUserState() {
-            const key = currentUser ? `ptl_state_v2_${currentUser}` : 'ptl_guest_state_v2';
+            const key = currentUser ? `ptl_state_v5_${currentUser}` : 'ptl_guest_state_v5';
             localStorage.setItem(key, JSON.stringify(userState));
         }
 
-        // CÜMLE ANLAMA VE FİLTRELEME MOTORU
+        // RENK PALETİ & AÇIK/KOYU TEMA YÖNETİMİ
+        const validPalettes = ['indigo', 'ocean', 'rose', 'amber', 'emerald'];
+
+        function setColorPalette(palette) {
+            const chosen = validPalettes.includes(palette) ? palette : 'indigo';
+            document.documentElement.setAttribute('data-palette', chosen);
+            localStorage.setItem('ptl_palette_v5', chosen);
+            const sel = document.getElementById('paletteSelect');
+            if (sel) sel.value = chosen;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('ptl_theme_v5', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        (function initThemeAndPalette() {
+            if (localStorage.getItem('ptl_theme_v5') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+            const savedPalette = localStorage.getItem('ptl_palette_v5') || 'indigo';
+            setColorPalette(savedPalette);
+        })();
+
+        // AKILLI YUKARI / AŞAĞI KAYDIRMA
+        function scrollToTopSmooth() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToBottomSmooth() {
+            window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+        }
+
+        function syncScrollButtons() {
+            const topBtn = document.getElementById('scrollTopBtn');
+            const bottomBtn = document.getElementById('scrollBottomBtn');
+            if (!topBtn || !bottomBtn) return;
+
+            const y = window.scrollY || document.documentElement.scrollTop;
+            const maxY = document.documentElement.scrollHeight - window.innerHeight;
+
+            topBtn.classList.toggle('hidden', y < 180);
+            bottomBtn.classList.toggle('hidden', maxY <= 180 || y >= maxY - 120);
+        }
+
+        window.addEventListener('scroll', syncScrollButtons, { passive: true });
+
+        // GELİŞMİŞ CÜMLE ANALİZİ
         function analyzeSentenceAndFilters(sentence, forcedDomain = null, forcedLevel = null, keyword = '') {
             const text = (sentence || '').toLowerCase().trim();
             const kw = (keyword || '').toLowerCase().trim();
 
             let level = forcedLevel && forcedLevel !== 'Auto' ? forcedLevel : null;
             if (!level) {
-                if (text.includes('başlangıç') || text.includes('sıfır') || text.includes('yeni başlayan') || text.includes('101') || text.includes('temel')) {
+                if (text.includes('başlangıç') || text.includes('sıfır') || text.includes('yeni başlayan') || text.includes('101') || text.includes('temel') || text.includes('hızlı')) {
                     level = 'Beginner';
                 } else if (text.includes('ileri') || text.includes('uzman') || text.includes('ileri seviye')) {
                     level = 'Advanced';
@@ -902,31 +1108,59 @@
                 }
             }
 
+            const scoredDomains = domainCatalog.map(d => {
+                let score = 0;
+                for (const k of d.keywords) {
+                    if (text.includes(k)) score += k.length;
+                }
+                return { id: d.id, label: d.label, score };
+            }).sort((a, b) => b.score - a.score);
+
             let domain = forcedDomain && forcedDomain !== 'Auto' ? forcedDomain : null;
             if (!domain) {
-                let bestScore = 0;
-                for (const d of domainCatalog) {
-                    let score = 0;
-                    for (const k of d.keywords) {
-                        if (text.includes(k)) score += k.length;
-                    }
-                    if (score > bestScore) {
-                        bestScore = score;
-                        domain = d.id;
-                    }
-                }
-                if (!domain) domain = 'Python';
+                domain = scoredDomains[0] && scoredDomains[0].score > 0 ? scoredDomains[0].id : 'History';
             }
 
-            return { domain, level, rawSentence: sentence.trim(), keyword: kw };
+            const secondaryDomainObj = scoredDomains.find(d => d.id !== domain && d.score > 0);
+            const secondaryDomain = secondaryDomainObj ? secondaryDomainObj.id : null;
+
+            let paceLabel = 'Standart Tempo';
+            if (text.includes('hızlı') || text.includes('kısa') || text.includes('özet')) paceLabel = 'Hızlı Özet';
+            else if (text.includes('hafta son') || text.includes('az vakit') || text.includes('günde 20')) paceLabel = 'Hafif Tempo';
+            else if (text.includes('yoğun') || text.includes('derin') || text.includes('detaylı')) paceLabel = 'Derin Odak';
+
+            let aimLabel = 'Genel Gelişim';
+            if (text.includes('sınav') || text.includes('test') || text.includes('hazırlık')) aimLabel = 'Sınav Hazırlığı';
+            else if (text.includes('proje') || text.includes('yapmak') || text.includes('üretmek')) aimLabel = 'Uygulama & Proje';
+            else if (text.includes('hobi') || text.includes('keyif') || text.includes('merak')) aimLabel = 'Hobi & Keşif';
+
+            return {
+                domain,
+                secondaryDomain,
+                level,
+                paceLabel,
+                aimLabel,
+                rawSentence: sentence.trim(),
+                keyword: kw
+            };
         }
 
-        function createRoadmapData(sentence, forcedDomain = 'Auto', forcedLevel = 'Auto', keyword = '') {
-            const info = analyzeSentenceAndFilters(sentence, forcedDomain, forcedLevel, keyword);
+        function getCandidateCourses(info) {
+            let primaryPool = allCourses.filter(c => c.domain === info.domain && c.level === info.level);
+            if (primaryPool.length < 12) {
+                const sameDom = allCourses.filter(c => c.domain === info.domain && !primaryPool.some(x => x.id === c.id));
+                primaryPool = [...primaryPool, ...sameDom];
+            }
 
-            let candidates = allCourses.filter(c => c.domain === info.domain && c.level === info.level);
-            if (candidates.length < 6) {
-                candidates = [...candidates, ...allCourses.filter(c => c.domain === info.domain)];
+            let combined = [...primaryPool];
+            if (info.secondaryDomain) {
+                const secPool = allCourses.filter(c => c.domain === info.secondaryDomain && !combined.some(x => x.id === c.id)).slice(0, 6);
+                combined = [...combined, ...secPool];
+            }
+
+            if (combined.length < 24) {
+                const rest = allCourses.filter(c => !combined.some(x => x.id === c.id));
+                combined = [...combined, ...rest];
             }
 
             const searchTerms = [...info.rawSentence.toLowerCase().split(/\s+/), ...info.keyword.split(/\s+/)]
@@ -934,7 +1168,7 @@
                 .filter(t => t.length > 2);
 
             if (searchTerms.length > 0) {
-                candidates = [...candidates].sort((a, b) => {
+                combined = [...combined].sort((a, b) => {
                     const aHay = `${a.title} ${a.description} ${a.domainLabel}`.toLowerCase();
                     const bHay = `${b.title} ${b.description} ${b.domainLabel}`.toLowerCase();
                     const aHits = searchTerms.reduce((acc, term) => acc + (aHay.includes(term) ? 1 : 0), 0);
@@ -943,24 +1177,151 @@
                 });
 
                 if (info.keyword) {
-                    const kwMatched = candidates.filter(c =>
+                    const kwMatched = combined.filter(c =>
                         `${c.title} ${c.description}`.toLowerCase().includes(info.keyword)
                     );
-                    if (kwMatched.length >= 3) {
-                        candidates = kwMatched;
+                    if (kwMatched.length >= 6) {
+                        combined = kwMatched;
                     }
                 }
             }
 
-            const picked = candidates.slice(0, 6);
+            return combined;
+        }
+
+        function buildRoadmapSubtitle(meta, count) {
+            const domainTr = domainCatalog.find(d => d.id === meta.domain)?.label || 'Genel';
+            const secTr = meta.secondaryDomain ? ` + ${domainCatalog.find(d => d.id === meta.secondaryDomain)?.label}` : '';
+            const levelTr = levelTrMap[meta.level] || 'Başlangıç';
+            return `${domainTr}${secTr} • ${levelTr} • ${meta.paceLabel} • ${meta.aimLabel} • ${count} Ders`;
+        }
+
+        function createRoadmapData(sentence, forcedDomain = 'Auto', forcedLevel = 'Auto', keyword = '', limit = 12) {
+            const info = analyzeSentenceAndFilters(sentence, forcedDomain, forcedLevel, keyword);
+            const candidates = getCandidateCourses(info);
+            const picked = candidates.slice(0, limit);
             const domainTr = domainCatalog.find(d => d.id === info.domain)?.label || 'Genel';
             const levelTr = levelTrMap[info.level] || 'Başlangıç';
 
             return {
                 title: info.rawSentence ? `"${info.rawSentence}" Yol Haritası` : `${domainTr} (${levelTr}) Yol Haritası`,
-                desc: `Alan: ${domainTr} • Seviye: ${levelTr}${info.keyword ? ` • Anahtar: "${info.keyword}"` : ''} • 4.000 derslik havuz`,
+                desc: buildRoadmapSubtitle(info, picked.length),
+                meta: info,
                 courses: picked
             };
+        }
+
+        function loadMoreRoadmapCourses() {
+            const rm = userState.activeRoadmap;
+            if (!rm || !rm.meta) return;
+            const currentCount = rm.courses.length;
+            const nextLimit = Math.min(currentCount + 6, 36);
+            const candidates = getCandidateCourses(rm.meta);
+            const existingIds = new Set(rm.courses.map(c => c.id));
+            const additions = candidates.filter(c => !existingIds.has(c.id)).slice(0, nextLimit - currentCount);
+            rm.courses = [...rm.courses, ...additions];
+            rm.desc = buildRoadmapSubtitle(rm.meta, rm.courses.length);
+            saveUserState();
+            renderRoadmapTab();
+            lucide.createIcons();
+            showToast(`Toplam ${rm.courses.length} ders listeleniyor.`, 'success');
+        }
+
+        function replaceCourseWithAlternative(courseId) {
+            const rm = userState.activeRoadmap;
+            if (!rm || !rm.courses) return;
+            const idx = rm.courses.findIndex(c => c.id === courseId);
+            if (idx === -1) return;
+
+            const currentCourse = rm.courses[idx];
+            const usedIds = new Set(rm.courses.map(c => c.id));
+            const alt = allCourses.find(c =>
+                !usedIds.has(c.id) &&
+                c.domain === currentCourse.domain &&
+                c.level === currentCourse.level
+            ) || allCourses.find(c => !usedIds.has(c.id) && c.domain === currentCourse.domain);
+
+            if (!alt) {
+                showToast('Bu kriterde başka alternatif ders bulunamadı.', 'info');
+                return;
+            }
+
+            rm.courses[idx] = alt;
+            saveUserState();
+            renderRoadmapTab();
+            lucide.createIcons();
+            showToast(`Ders "${alt.title}" ile değiştirildi.`, 'success');
+        }
+
+        function saveCourseNote(courseId, noteValue) {
+            userState.courseNotes[courseId] = noteValue;
+            saveUserState();
+        }
+
+        function exportRoadmapMarkdown() {
+            const rm = userState.activeRoadmap;
+            if (!rm || !rm.courses) return;
+
+            let md = `# ${rm.title}\n\n${rm.desc}\n\n`;
+            rm.courses.forEach((c, i) => {
+                const doneMark = userState.completedCourseIds.includes(c.id) ? 'x' : ' ';
+                const note = (userState.courseNotes[c.id] || '').trim();
+                md += `- [${doneMark}] **${i + 1}. ${c.title}** (${c.domainLabel} | ${c.levelLabel} | ${c.duration})\n`;
+                md += `  - Eğitmen: ${c.instructor}\n`;
+                if (note) md += `  - Notum: ${note}\n`;
+            });
+
+            const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pathtolearn-yol-haritasi.md';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Yol haritası .MD olarak indirildi.', 'success');
+        }
+
+        function exportUserBackupJSON() {
+            const payload = {
+                exportedAt: new Date().toISOString(),
+                user: currentUser || 'guest',
+                userState,
+                communityComments
+            };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pathtolearn-yedek-${(currentUser || 'misafir').toLowerCase()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('İlerleme ve not yedeği (.JSON) indirildi.', 'success');
+        }
+
+        function importUserBackupJSON(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const data = JSON.parse(reader.result);
+                    if (data.userState) {
+                        userState = { ...getDefaultState(), ...data.userState };
+                        saveUserState();
+                    }
+                    if (Array.isArray(data.communityComments)) {
+                        communityComments = data.communityComments;
+                        localStorage.setItem('ptl_community_comments_v5', JSON.stringify(communityComments));
+                    }
+                    updateCountersAndBars();
+                    renderProfileTab();
+                    showToast('Yedek başarıyla geri yüklendi.', 'success');
+                } catch {
+                    showToast('Geçersiz JSON yedek dosyası.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
         }
 
         function createRoadmapInTab() {
@@ -974,7 +1335,7 @@
                 return;
             }
 
-            const roadmap = createRoadmapData(sentence, domainSel, levelSel, kwVal);
+            const roadmap = createRoadmapData(sentence, domainSel, levelSel, kwVal, 12);
             userState.activeRoadmap = roadmap;
 
             const recordLabel = sentence || `${domainSel} (${levelSel}) ${kwVal}`.trim();
@@ -985,12 +1346,12 @@
             saveUserState();
 
             navigateTo('roadmap');
-            showToast('Yol haritası Yol Haritası sekmesinde açıldı.', 'success');
+            showToast('Kişiselleştirilmiş yol haritası Yol Haritası sekmesinde açıldı.', 'success');
         }
 
         function applyQuickSentence(sentence) {
             document.getElementById('sentenceGoalInput').value = sentence;
-            const roadmap = createRoadmapData(sentence, 'Auto', 'Auto', '');
+            const roadmap = createRoadmapData(sentence, 'Auto', 'Auto', '', 12);
             userState.activeRoadmap = roadmap;
             if (!userState.recentGoals.includes(sentence)) {
                 userState.recentGoals.unshift(sentence);
@@ -1001,13 +1362,12 @@
         }
 
         function applyDailySuggestion() {
-            const roadmap = createRoadmapData(siteSettings.dailyTitle + ' ' + siteSettings.dailyBody, 'Finance', 'Beginner', '');
+            const roadmap = createRoadmapData(siteSettings.dailyTitle + ' ' + siteSettings.dailyBody, 'Finance', 'Beginner', '', 12);
             userState.activeRoadmap = roadmap;
             saveUserState();
             navigateTo('roadmap');
         }
 
-        // SAYFA YÖNETİMİ
         const viewMap = {
             home: 'viewHome',
             roadmap: 'viewRoadmap',
@@ -1021,7 +1381,6 @@
         };
 
         function navigateTo(key) {
-            // Admin sekmesine yetkisiz erişimi engelle
             if (key === 'admin' && !isAdminLoggedIn()) {
                 showToast('Admin paneli yalnızca admin hesabıyla giriş yapıldığında açılır.', 'error');
                 key = 'home';
@@ -1058,9 +1417,9 @@
 
             lucide.createIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(syncScrollButtons, 150);
         }
 
-        // RENDER İŞLEMLERİ
         function renderHomeView() {
             document.getElementById('homeHeroTitle').innerText = siteSettings.heroTitle;
             document.getElementById('homeHeroDesc').innerText = siteSettings.heroDesc;
@@ -1086,20 +1445,48 @@
             document.getElementById('roadmapTabTitle').innerText = rm.title;
             document.getElementById('roadmapTabSubtitle').innerText = rm.desc;
 
+            const q = (document.getElementById('roadmapQuickSearch')?.value || '').toLowerCase().trim();
+            const lvlFilter = document.getElementById('roadmapLevelFilter')?.value || 'ALL';
+
+            let courses = rm.courses || [];
+            if (lvlFilter !== 'ALL') {
+                courses = courses.filter(c => c.level === lvlFilter);
+            }
+            if (q) {
+                courses = courses.filter(c => {
+                    const note = (userState.courseNotes[c.id] || '').toLowerCase();
+                    return `${c.title} ${c.description} ${c.instructor} ${c.domainLabel} ${note}`.toLowerCase().includes(q);
+                });
+            }
+
+            if (!courses.length) {
+                document.getElementById('roadmapTabStages').innerHTML = `
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 text-center text-xs text-slate-500">
+                        Seçili filtreye uyan ders bulunamadı.
+                    </div>
+                `;
+                updateCountersAndBars();
+                return;
+            }
+
+            const chunkSize = Math.max(4, Math.ceil(courses.length / 3));
             const stages = [
-                { name: '1. Aşama — Temel Kavramlar', items: rm.courses.slice(0, 2) },
-                { name: '2. Aşama — Uygulama ve Pratik', items: rm.courses.slice(2, 4) },
-                { name: '3. Aşama — Derinleşme ve Proje', items: rm.courses.slice(4, 6) }
-            ];
+                { name: '1. Aşama — Temel Kavramlar', items: courses.slice(0, chunkSize) },
+                { name: '2. Aşama — Uygulama ve Pratik', items: courses.slice(chunkSize, chunkSize * 2) },
+                { name: '3. Aşama — Derinleşme ve Proje', items: courses.slice(chunkSize * 2) }
+            ].filter(s => s.items.length > 0);
 
             document.getElementById('roadmapTabStages').innerHTML = stages.map((st, idx) => `
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
-                    <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-                        <span class="w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-extrabold flex items-center justify-center">${idx + 1}</span>
-                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white">${st.name}</h3>
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-extrabold flex items-center justify-center">${idx + 1}</span>
+                            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">${st.name}</h3>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400">${st.items.length} Ders</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${st.items.map(c => renderCourseCard(c)).join('')}
+                        ${st.items.map(c => renderCourseCard(c, true)).join('')}
                     </div>
                 </div>
             `).join('');
@@ -1107,8 +1494,10 @@
             updateCountersAndBars();
         }
 
-        function renderCourseCard(course) {
+        function renderCourseCard(course, showRoadmapTools = false) {
             const done = userState.completedCourseIds.includes(course.id);
+            const noteVal = (userState.courseNotes[course.id] || '').replace(/"/g, '&quot;');
+
             return `
                 <div class="rounded-2xl border ${done ? 'border-brand-500/60 bg-brand-50/30 dark:bg-brand-950/15' : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/35'} p-5 flex flex-col justify-between space-y-4 smooth-ui">
                     <div class="space-y-2">
@@ -1119,13 +1508,33 @@
                         <h4 class="font-bold text-sm text-slate-900 dark:text-white">${course.title}</h4>
                         <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${course.description}</p>
                         <div class="text-[11px] text-slate-500">Eğitmen: <strong class="text-slate-700 dark:text-slate-300">${course.instructor}</strong></div>
+
+                        ${showRoadmapTools ? `
+                            <div class="pt-2">
+                                <input
+                                    type="text"
+                                    value="${noteVal}"
+                                    onchange="saveCourseNote('${course.id}', this.value)"
+                                    placeholder="Bu ders için kişisel notun..."
+                                    class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
+                                >
+                            </div>
+                        ` : ''}
                     </div>
 
-                    <div class="flex items-center justify-between pt-3 border-t border-slate-200/70 dark:border-slate-800">
-                        <a href="${course.searchUrl}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-brand-600 inline-flex items-center space-x-1">
-                            <span>Kaynak Ara</span>
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                        </a>
+                    <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-200/70 dark:border-slate-800">
+                        <div class="flex items-center space-x-3">
+                            <a href="${course.searchUrl}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-brand-600 inline-flex items-center space-x-1">
+                                <span>Kaynak Ara</span>
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            </a>
+                            ${showRoadmapTools ? `
+                                <button onclick="replaceCourseWithAlternative('${course.id}')" class="text-xs font-bold text-slate-500 hover:text-brand-600 inline-flex items-center space-x-1" title="Alternatif Ders Getir">
+                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                                    <span>Alternatif</span>
+                                </button>
+                            ` : ''}
+                        </div>
                         <button onclick="toggleCourseDone('${course.id}', '${course.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition flex items-center space-x-1.5 ${done ? 'bg-brand-600 text-white border-brand-600' : 'border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}">
                             <i data-lucide="${done ? 'check-circle' : 'circle'}" class="w-3.5 h-3.5"></i>
                             <span>${done ? 'Tamamlandı' : 'Bitir'}</span>
@@ -1137,12 +1546,12 @@
 
         function renderRecommendedPathsTab() {
             const list = [
-                { title: 'Oyun Geliştirme Keşif Yolu', level: 'Başlangıç → Orta', desc: 'Oyun kurgusu, sahne akışı ve prototip adımlarını gösterir.', tags: ['Oyun', 'Mekanik', 'Tasarım'] },
-                { title: 'Para Yönetimi ve Bütçe Yolu', level: 'Tüm Seviyeler', desc: 'Gelir-gider takibi, birikim ve finansal karar çerçevesi sunar.', tags: ['Para Yönetimi', 'Bütçe', 'Finans'] },
-                { title: 'Teknoloji 101 Temelleri', level: 'Başlangıç', desc: 'Dijital araçlar, ağ mantığı ve temel teknoloji kavramlarını özetler.', tags: ['Teknoloji 101', 'Dijital', 'Temel'] },
-                { title: 'Python ve Veri Akışı Yolu', level: 'Başlangıç → İleri', desc: 'Temel kodlamadan veri işleme ve otomasyona uzanan aşamalar.', tags: ['Python', 'Veri', 'Kod'] },
-                { title: 'Yapay Zeka ve Analitik Yolu', level: 'Orta → İleri', desc: 'Veri analizi ve model mantığı için rehber basamaklar.', tags: ['Yapay Zeka', 'Analitik', 'Model'] },
-                { title: 'Arayüz ve Ürün Tasarımı Yolu', level: 'Başlangıç → Orta', desc: 'Kullanıcı odaklı tasarım ve ürün geliştirme adımları.', tags: ['Tasarım', 'UI/UX', 'Ürün'] }
+                { title: 'Tarih ve Medeniyetler Yolu', level: 'Başlangıç → Orta', desc: 'Kadim medeniyetlerden modern döneme tarihsel gelişimi özetler.', tags: ['Tarih', 'Medeniyet', 'Kronoloji'] },
+                { title: 'Müzik Teorisi ve Ritim Yolu', level: 'Başlangıç → Orta', desc: 'Nota okuma, ritim duygusu ve armoni temellerini sunar.', tags: ['Müzik', 'Nota', 'Ritim'] },
+                { title: 'Resim ve Çizim Teknikleri Yolu', level: 'Başlangıç → Orta', desc: 'Karakalem, perspektif, renk ve kompozisyon aşamalarını gösterir.', tags: ['Resim', 'Çizim', 'Perspektif'] },
+                { title: 'Psikoloji ve Davranış Yolu', level: 'Başlangıç → İleri', desc: 'Bilişsel süreçler, duygular ve insan davranışı çerçevesi sunar.', tags: ['Psikoloji', 'Bilişsel', 'Davranış'] },
+                { title: 'Oyun Geliştirme ve Yazılım Yolu', level: 'Başlangıç → İleri', desc: 'Oyun mekanikleri ve kodlama adımlarını birleştirir.', tags: ['Oyun', 'Python', 'Tasarım'] },
+                { title: 'Para Yönetimi ve Teknoloji 101', level: 'Tüm Seviyeler', desc: 'Bütçe planlama ve temel dijital okuryazarlık basamakları.', tags: ['Para Yönetimi', 'Teknoloji 101'] }
             ];
 
             document.getElementById('recommendedPathsGrid').innerHTML = list.map(item => `
@@ -1163,28 +1572,28 @@
         function renderExampleRoadmapsTab() {
             const examples = [
                 {
-                    title: '"Başlangıç seviye bir oyun tasarlamak istiyorum"',
-                    tag: 'Oyun Tasarımı • Başlangıç',
-                    steps: ['1. Oyun mekaniği ve kural kurgusu', '2. Sahne ve karakter hareketi', '3. Basit oynanabilir prototip'],
-                    q: 'başlangıç seviye bir oyun tasarlamak istiyorum'
+                    title: '"Tarih ve medeniyetler hakkında öğrenmek istiyorum"',
+                    tag: 'Tarih • Başlangıç',
+                    steps: ['1. Kadim medeniyetler ve kaynak okuma', '2. Dönemsel dönüşümler', '3. Tarihsel analiz ve özetleme'],
+                    q: 'tarih ve medeniyetler hakkında öğrenmek istiyorum'
                 },
                 {
-                    title: '"Para yönetimi ve birikim alışkanlığı kazanmak istiyorum"',
-                    tag: 'Para Yönetimi • Başlangıç',
-                    steps: ['1. Aylık bütçe ve gider analizi', '2. Birikim hedefi belirleme', '3. Temel finansal planlama'],
-                    q: 'para yönetimi ve birikim alışkanlığı kazanmak istiyorum'
+                    title: '"Müzik teorisi ve ritim çalışmak istiyorum"',
+                    tag: 'Müzik • Başlangıç',
+                    steps: ['1. Nota ve ritim kalıpları', '2. Solfej ve aralık çalışmaları', '3. Basit ezgi ve akor pratiği'],
+                    q: 'müzik teorisi ve ritim çalışmak istiyorum'
                 },
                 {
-                    title: '"Teknoloji 101 ile temel kavramları öğrenmek istiyorum"',
-                    tag: 'Teknoloji 101 • Başlangıç',
-                    steps: ['1. Dijital sistemlerin çalışma mantığı', '2. İnternet ve bulut araçları', '3. Temel güvenlik alışkanlıkları'],
-                    q: 'teknoloji 101 ile temel kavramları öğrenmek istiyorum'
+                    title: '"Resim çizim ve perspektif öğrenmek istiyorum"',
+                    tag: 'Resim • Başlangıç',
+                    steps: ['1. Karakalem çizgi ve oran', '2. Perspektif, ışık ve gölge', '3. Renk ve kompozisyon çalışması'],
+                    q: 'resim çizim ve perspektif öğrenmek istiyorum'
                 },
                 {
-                    title: '"Orta seviye python ve veri analizi yapmak istiyorum"',
-                    tag: 'Python & Veri • Orta',
-                    steps: ['1. Veri yapıları ve fonksiyonlar', '2. Veri temizleme ve analiz', '3. Otomasyon uygulaması'],
-                    q: 'orta seviye python ve veri analizi yapmak istiyorum'
+                    title: '"Psikoloji ve bilişsel süreçleri öğrenmek istiyorum"',
+                    tag: 'Psikoloji • Başlangıç',
+                    steps: ['1. Temel psikoloji kavramları', '2. Hafıza, dikkat ve öğrenme', '3. Duygu, stres ve sosyal etkileşim'],
+                    q: 'psikoloji ve bilişsel süreçleri öğrenmek istiyorum'
                 }
             ];
 
@@ -1205,9 +1614,13 @@
         }
 
         function renderRecommendedCoursesTab() {
-            const pickedIds = ['CRS-0005', 'CRS-0006', 'CRS-0001', 'CRS-0002', 'CRS-0003', 'CRS-0004'];
-            const list = allCourses.filter(c => pickedIds.includes(c.id));
-            document.getElementById('recommendedCoursesGrid').innerHTML = list.map(c => renderCourseCard(c)).join('');
+            const domainsToShow = ['History', 'Music', 'Art', 'Psychology', 'Finance', 'Tech'];
+            const list = [];
+            domainsToShow.forEach(dom => {
+                const found = allCourses.filter(c => c.domain === dom).slice(0, 2);
+                list.push(...found);
+            });
+            document.getElementById('recommendedCoursesGrid').innerHTML = list.map(c => renderCourseCard(c, false)).join('');
         }
 
         function renderCompletedTab() {
@@ -1223,10 +1636,9 @@
                 `;
                 return;
             }
-            container.innerHTML = done.map(c => renderCourseCard(c)).join('');
+            container.innerHTML = done.map(c => renderCourseCard(c, false)).join('');
         }
 
-        // ADMİN PANELİ İŞLEMLERİ
         function renderAdminTab() {
             if (!isAdminLoggedIn()) return;
             document.getElementById('adminHeroTitle').value = siteSettings.heroTitle;
@@ -1282,9 +1694,9 @@
             }
 
             const domainLabel = domainCatalog.find(d => d.id === domain)?.label || domain;
-            allCourses.unshift({
+            const newCourse = {
                 id: `ADM-${Date.now().toString().slice(-5)}`,
-                code: `ADM-${allCourses.length + 1}`,
+                code: `ADM-${loadCustomCourses().length + 1}`,
                 title,
                 domain,
                 domainLabel,
@@ -1292,13 +1704,18 @@
                 levelLabel: levelTrMap[level] || level,
                 instructor,
                 duration: '4 Hafta',
-                description: `${domainLabel} alanında admin tarafından eklenen ders.`,
+                description: `${domainLabel} branşında admin tarafından kalıcı olarak eklenen ders.`,
                 searchUrl: `https://ocw.mit.edu/search/?q=${encodeURIComponent(title)}`
-            });
+            };
+
+            const customList = loadCustomCourses();
+            customList.unshift(newCourse);
+            saveCustomCourses(customList);
+            build10000CoursePool();
 
             document.getElementById('adminCourseTitle').value = '';
             document.getElementById('adminCourseInstructor').value = '';
-            showToast(`"${title}" ders havuzuna eklendi.`, 'success');
+            showToast(`"${title}" kalıcı olarak havuza eklendi.`, 'success');
         }
 
         function renderAdminCommentsList() {
@@ -1323,7 +1740,7 @@
         function deleteAdminComment(id) {
             if (!isAdminLoggedIn()) return;
             communityComments = communityComments.filter(c => c.id !== id);
-            localStorage.setItem('ptl_community_comments_v2', JSON.stringify(communityComments));
+            localStorage.setItem('ptl_community_comments_v5', JSON.stringify(communityComments));
             renderAdminCommentsList();
             showToast('Yorum silindi.', 'info');
         }
@@ -1353,7 +1770,6 @@
             `).join('');
         }
 
-        // KALICI YORUMLAR
         function addCommunityComment() {
             const author = document.getElementById('commentAuthorInput').value.trim() || (currentUser || 'Anonim');
             const text = document.getElementById('commentTextInput').value.trim();
@@ -1370,7 +1786,7 @@
                 date: new Date().toLocaleDateString('tr-TR')
             });
 
-            localStorage.setItem('ptl_community_comments_v2', JSON.stringify(communityComments));
+            localStorage.setItem('ptl_community_comments_v5', JSON.stringify(communityComments));
             document.getElementById('commentTextInput').value = '';
             renderCommunityComments();
             showToast('Önerin kaydedildi.', 'success');
@@ -1426,7 +1842,6 @@
             if (barEl) barEl.style.width = `${pct}%`;
         }
 
-        // HOŞ GELDİNİZ POPUP
         function openWelcomeModal(force = false) {
             if (!force && siteSettings.hideWelcome) return;
             document.getElementById('welcomeModalTitle').innerText = siteSettings.welcomeTitle;
@@ -1446,7 +1861,6 @@
             document.getElementById('welcomeModal').classList.add('hidden');
         }
 
-        // AUTH MODAL (ADMİN GİRİŞİ + STANDART KULLANICI GİRİŞ/KAYIT)
         function openAuthModal(mode = 'login') {
             switchAuthMode(mode);
             document.getElementById('authModal').classList.remove('hidden');
@@ -1482,14 +1896,13 @@
                 return;
             }
 
-            // Admin hesabı kontrolü
             if (name.toLowerCase() === ADMIN_CREDENTIALS.username.toLowerCase()) {
                 if (pass !== ADMIN_CREDENTIALS.password) {
                     showToast('Admin şifresi hatalı.', 'error');
                     return;
                 }
                 currentUser = ADMIN_CREDENTIALS.username;
-                localStorage.setItem('ptl_active_user_v2', currentUser);
+                localStorage.setItem('ptl_active_user_v5', currentUser);
                 userState = loadUserState();
                 syncHeaderAuth();
                 closeAuthModal();
@@ -1497,16 +1910,16 @@
                 return;
             }
 
-            const db = JSON.parse(localStorage.getItem('ptl_users_db_v2') || '{}');
+            const db = JSON.parse(localStorage.getItem('ptl_users_db_v5') || '{}');
             if (authMode === 'register') {
                 if (db[name]) {
                     showToast('Bu kullanıcı adı zaten kayıtlı.', 'error');
                     return;
                 }
                 db[name] = pass;
-                localStorage.setItem('ptl_users_db_v2', JSON.stringify(db));
+                localStorage.setItem('ptl_users_db_v5', JSON.stringify(db));
                 currentUser = name;
-                localStorage.setItem('ptl_active_user_v2', currentUser);
+                localStorage.setItem('ptl_active_user_v5', currentUser);
                 userState = getDefaultState();
                 saveUserState();
                 syncHeaderAuth();
@@ -1518,7 +1931,7 @@
                     return;
                 }
                 currentUser = name;
-                localStorage.setItem('ptl_active_user_v2', currentUser);
+                localStorage.setItem('ptl_active_user_v5', currentUser);
                 userState = loadUserState();
                 syncHeaderAuth();
                 closeAuthModal();
@@ -1529,7 +1942,7 @@
         function logoutUser() {
             const wasAdmin = isAdminLoggedIn();
             currentUser = null;
-            localStorage.removeItem('ptl_active_user_v2');
+            localStorage.removeItem('ptl_active_user_v5');
             userState = loadUserState();
             syncHeaderAuth();
             if (wasAdmin && !document.getElementById('viewAdmin').classList.contains('hidden')) {
@@ -1586,24 +1999,14 @@
             showToast('Mesajın gönderildi.', 'success');
         }
 
-        function toggleTheme() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('ptl_theme_v2', html.classList.contains('dark') ? 'dark' : 'light');
-        }
-
-        if (localStorage.getItem('ptl_theme_v2') === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-
         function showToast(msg, type = 'success') {
             const box = document.getElementById('toastContainer');
             const el = document.createElement('div');
             const cls = type === 'success'
-                ? 'bg-emerald-600 text-white'
+                ? 'bg-slate-900 dark:bg-slate-800 border border-brand-500/50 text-white'
                 : type === 'error'
                 ? 'bg-rose-600 text-white'
-                : 'bg-slate-900 dark:bg-slate-800 text-white';
+                : 'bg-slate-800 text-white';
             el.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl text-xs font-bold transition-all duration-300 opacity-0 translate-y-2 ${cls}`;
             el.innerText = msg;
             box.appendChild(el);
@@ -1618,6 +2021,7 @@
         syncHeaderAuth();
         navigateTo('home');
         openWelcomeModal(false);
+        syncScrollButtons();
     </script>
 </body>
 </html>
