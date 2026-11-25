@@ -302,7 +302,6 @@
             </nav>
 
             <div class="flex items-center space-x-2 shrink-0">
-                <!-- Renk Teması Seçici -->
                 <select id="paletteSelect" onchange="setColorPalette(this.value)" aria-label="Renk Teması" class="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
                     <option value="indigo">İndigo</option>
                     <option value="ocean">Okyanus</option>
@@ -418,7 +417,7 @@
             </div>
 
             <!-- Cümleden Yol Haritası Üretici + Geniş Filtreleme -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 smooth-ui">
+            <div id="roadmapCreatorCard" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 smooth-ui">
                 <div class="space-y-1">
                     <h3 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center space-x-2">
                         <i data-lucide="wand-2" class="w-5 h-5 text-brand-500"></i>
@@ -522,17 +521,17 @@
 
         <!-- 2. OLUŞTURULAN YOL HARİTASI SEKMESİ -->
         <section id="viewRoadmap" class="hidden space-y-6 view-enter">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div id="roadmapHeaderCard" class="hidden flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="space-y-1">
                     <button onclick="navigateTo('home')" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline inline-flex items-center space-x-1 mb-1">
                         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
                         <span>Ana Sayfaya Dön</span>
                     </button>
                     <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white" id="roadmapTabTitle">Yol Haritası</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400" id="roadmapTabSubtitle">Cümleden analiz edilerek oluşturulan ders sırası</p>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400" id="roadmapTabSubtitle"></p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div id="roadmapActionControls" class="hidden flex-wrap items-center gap-2.5">
                     <button onclick="loadMoreRoadmapCourses()" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-extrabold transition shadow-sm flex items-center space-x-1.5">
                         <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                         <span>+6 Ek Ders Daha Göster</span>
@@ -555,8 +554,17 @@
                 </div>
             </div>
 
+            <!-- Kayıtlı Yol Haritaları Seçici -->
+            <div id="savedRoadmapsBox" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-2.5">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
+                    <span>Oluşturduğun Yol Haritaları (Geçiş Yapabilirsin)</span>
+                    <span id="savedRoadmapsCountBadge">0 Harita</span>
+                </div>
+                <div id="savedRoadmapsList" class="flex flex-wrap gap-2"></div>
+            </div>
+
             <!-- Yol Haritası İçi Hızlı Filtre -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <div id="roadmapFilterBox" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
                 <input type="text" id="roadmapQuickSearch" oninput="renderRoadmapTab()" placeholder="Bu yol haritası içindeki derslerde ara (başlık, eğitmen, not)..." class="flex-grow px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
                 <select id="roadmapLevelFilter" onchange="renderRoadmapTab()" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold">
                     <option value="ALL">Tüm Seviyeler</option>
@@ -574,7 +582,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Önerilen Yollar</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Farklı branşlar için hazırlanan rehber yol özeti.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Bir yola tıkla ve doğrudan Yol Haritası sekmesinde aç.</p>
                 </div>
                 <button onclick="navigateTo('home')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold hover:opacity-90 transition flex items-center space-x-1.5">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i><span>Ana Sayfaya Dön</span>
@@ -789,7 +797,6 @@
                     <div id="profileRecentGoals" class="flex flex-wrap gap-2"></div>
                 </div>
 
-                <!-- Yedekle / Geri Yükle -->
                 <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-2.5">
                     <button onclick="exportUserBackupJSON()" class="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-brand-600 text-white text-xs font-bold transition flex items-center space-x-1.5">
                         <i data-lucide="hard-drive-download" class="w-3.5 h-3.5"></i>
@@ -999,14 +1006,14 @@
         }
 
         function getDefaultState() {
-            const firstMap = createRoadmapData('tarih ve medeniyetler hakkında öğrenmek istiyorum', 'History', 'Beginner', '', 12);
             return {
                 completedCourseIds: [],
                 courseNotes: {},
                 streak: 1,
                 lastVisit: new Date().toDateString(),
-                recentGoals: ['tarih ve medeniyetler hakkında öğrenmek istiyorum'],
-                activeRoadmap: firstMap
+                recentGoals: [],
+                activeRoadmap: null,
+                savedRoadmaps: []
             };
         }
 
@@ -1019,6 +1026,14 @@
                 st.courseNotes = {};
             }
 
+            if (!Array.isArray(st.recentGoals)) {
+                st.recentGoals = [];
+            }
+
+            // Her yeni oturum/sayfa açılışında yol haritası başlangıçta boş olsun
+            st.activeRoadmap = null;
+            st.savedRoadmaps = [];
+
             const today = new Date().toDateString();
             if (st.lastVisit !== today) {
                 const prev = new Date(st.lastVisit || today);
@@ -1026,12 +1041,9 @@
                 if (diff === 1) st.streak = (st.streak || 1) + 1;
                 else if (diff > 1) st.streak = 1;
                 st.lastVisit = today;
-                localStorage.setItem(key, JSON.stringify(st));
             }
 
-            if (!st.activeRoadmap || !st.activeRoadmap.courses || !st.activeRoadmap.courses.length) {
-                st.activeRoadmap = createRoadmapData('tarih ve medeniyetler hakkında öğrenmek istiyorum', 'History', 'Beginner', '', 12);
-            }
+            localStorage.setItem(key, JSON.stringify(st));
             return st;
         }
 
@@ -1040,6 +1052,36 @@
         function saveUserState() {
             const key = currentUser ? `ptl_state_v5_${currentUser}` : 'ptl_guest_state_v5';
             localStorage.setItem(key, JSON.stringify(userState));
+        }
+
+        function focusRoadmapCreator() {
+            navigateTo('home');
+            setTimeout(() => {
+                const card = document.getElementById('roadmapCreatorCard');
+                const input = document.getElementById('sentenceGoalInput');
+                if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (input) input.focus();
+            }, 120);
+        }
+
+        function registerRoadmapInHistory(roadmap) {
+            if (!roadmap || !roadmap.title) return;
+            if (!Array.isArray(userState.savedRoadmaps)) userState.savedRoadmaps = [];
+            const filtered = userState.savedRoadmaps.filter(r => r.title !== roadmap.title);
+            userState.savedRoadmaps = [roadmap, ...filtered].slice(0, 10);
+            userState.activeRoadmap = roadmap;
+            saveUserState();
+        }
+
+        function selectSavedRoadmap(index) {
+            const list = userState.savedRoadmaps || [];
+            const chosen = list[index];
+            if (!chosen) return;
+            userState.activeRoadmap = chosen;
+            saveUserState();
+            renderRoadmapTab();
+            lucide.createIcons();
+            showToast(`"${chosen.title}" yol haritası açıldı.`, 'info');
         }
 
         // RENK PALETİ & AÇIK/KOYU TEMA YÖNETİMİ
@@ -1213,7 +1255,10 @@
 
         function loadMoreRoadmapCourses() {
             const rm = userState.activeRoadmap;
-            if (!rm || !rm.meta) return;
+            if (!rm || !rm.meta) {
+                showToast('Önce bir yol haritası oluşturmalısın.', 'info');
+                return;
+            }
             const currentCount = rm.courses.length;
             const nextLimit = Math.min(currentCount + 6, 36);
             const candidates = getCandidateCourses(rm.meta);
@@ -1221,7 +1266,7 @@
             const additions = candidates.filter(c => !existingIds.has(c.id)).slice(0, nextLimit - currentCount);
             rm.courses = [...rm.courses, ...additions];
             rm.desc = buildRoadmapSubtitle(rm.meta, rm.courses.length);
-            saveUserState();
+            registerRoadmapInHistory(rm);
             renderRoadmapTab();
             lucide.createIcons();
             showToast(`Toplam ${rm.courses.length} ders listeleniyor.`, 'success');
@@ -1247,7 +1292,7 @@
             }
 
             rm.courses[idx] = alt;
-            saveUserState();
+            registerRoadmapInHistory(rm);
             renderRoadmapTab();
             lucide.createIcons();
             showToast(`Ders "${alt.title}" ile değiştirildi.`, 'success');
@@ -1260,7 +1305,10 @@
 
         function exportRoadmapMarkdown() {
             const rm = userState.activeRoadmap;
-            if (!rm || !rm.courses) return;
+            if (!rm || !rm.courses) {
+                showToast('Dışa aktarılacak aktif bir yol haritası bulunmuyor.', 'info');
+                return;
+            }
 
             let md = `# ${rm.title}\n\n${rm.desc}\n\n`;
             rm.courses.forEach((c, i) => {
@@ -1336,7 +1384,7 @@
             }
 
             const roadmap = createRoadmapData(sentence, domainSel, levelSel, kwVal, 12);
-            userState.activeRoadmap = roadmap;
+            registerRoadmapInHistory(roadmap);
 
             const recordLabel = sentence || `${domainSel} (${levelSel}) ${kwVal}`.trim();
             if (recordLabel && !userState.recentGoals.includes(recordLabel)) {
@@ -1349,10 +1397,22 @@
             showToast('Kişiselleştirilmiş yol haritası Yol Haritası sekmesinde açıldı.', 'success');
         }
 
+        function openRecommendedPath(sentence, domain, level = 'Beginner') {
+            const roadmap = createRoadmapData(sentence, domain, level, '', 12);
+            registerRoadmapInHistory(roadmap);
+            if (!userState.recentGoals.includes(sentence)) {
+                userState.recentGoals.unshift(sentence);
+                userState.recentGoals = userState.recentGoals.slice(0, 8);
+            }
+            saveUserState();
+            navigateTo('roadmap');
+            showToast(`"${sentence}" yol haritası açıldı.`, 'success');
+        }
+
         function applyQuickSentence(sentence) {
             document.getElementById('sentenceGoalInput').value = sentence;
             const roadmap = createRoadmapData(sentence, 'Auto', 'Auto', '', 12);
-            userState.activeRoadmap = roadmap;
+            registerRoadmapInHistory(roadmap);
             if (!userState.recentGoals.includes(sentence)) {
                 userState.recentGoals.unshift(sentence);
                 userState.recentGoals = userState.recentGoals.slice(0, 8);
@@ -1363,8 +1423,7 @@
 
         function applyDailySuggestion() {
             const roadmap = createRoadmapData(siteSettings.dailyTitle + ' ' + siteSettings.dailyBody, 'Finance', 'Beginner', '', 12);
-            userState.activeRoadmap = roadmap;
-            saveUserState();
+            registerRoadmapInHistory(roadmap);
             navigateTo('roadmap');
         }
 
@@ -1440,10 +1499,75 @@
             renderCommunityComments();
         }
 
+        function renderSavedRoadmapsSelector() {
+            const list = userState.savedRoadmaps || [];
+            const box = document.getElementById('savedRoadmapsBox');
+            const badge = document.getElementById('savedRoadmapsCountBadge');
+            const listEl = document.getElementById('savedRoadmapsList');
+            if (!box || !badge || !listEl) return;
+
+            if (!list.length || !userState.activeRoadmap) {
+                box.classList.add('hidden');
+                listEl.innerHTML = '';
+                return;
+            }
+
+            box.classList.remove('hidden');
+            const activeTitle = userState.activeRoadmap?.title || '';
+            badge.innerText = `${list.length} Harita`;
+            listEl.innerHTML = list.map((rm, i) => {
+                const isCurrent = rm.title === activeTitle;
+                return `
+                    <button onclick="selectSavedRoadmap(${i})" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition flex items-center space-x-1.5 ${isCurrent ? 'bg-brand-600 text-white border-brand-600 shadow-sm' : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-brand-500'}">
+                        <i data-lucide="route" class="w-3.5 h-3.5"></i>
+                        <span class="max-w-[220px] truncate">${rm.title}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
         function renderRoadmapTab() {
             const rm = userState.activeRoadmap;
+            const headerCard = document.getElementById('roadmapHeaderCard');
+            const controlsEl = document.getElementById('roadmapActionControls');
+            const filterBoxEl = document.getElementById('roadmapFilterBox');
+            const savedBoxEl = document.getElementById('savedRoadmapsBox');
+            const savedListEl = document.getElementById('savedRoadmapsList');
+            const stagesEl = document.getElementById('roadmapTabStages');
+
+            if (!rm || !rm.courses || !rm.courses.length) {
+                headerCard?.classList.add('hidden');
+                headerCard?.classList.remove('flex');
+                controlsEl?.classList.add('hidden');
+                controlsEl?.classList.remove('flex');
+                filterBoxEl?.classList.add('hidden');
+                filterBoxEl?.classList.remove('flex');
+                savedBoxEl?.classList.add('hidden');
+                if (savedListEl) savedListEl.innerHTML = '';
+
+                stagesEl.innerHTML = `
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center space-y-5 shadow-sm">
+                        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">Şu an herhangi bir haritanız bulunmuyor</h3>
+                        <button onclick="focusRoadmapCreator()" class="px-6 py-3 rounded-2xl accent-gradient hover:opacity-95 text-white text-xs sm:text-sm font-extrabold transition shadow-lg inline-flex items-center space-x-2">
+                            <i data-lucide="wand-2" class="w-4 h-4"></i>
+                            <span>Yol Haritası Oluşturun</span>
+                        </button>
+                    </div>
+                `;
+                updateCountersAndBars();
+                return;
+            }
+
+            headerCard?.classList.remove('hidden');
+            headerCard?.classList.add('flex');
+            controlsEl?.classList.remove('hidden');
+            controlsEl?.classList.add('flex');
+            filterBoxEl?.classList.remove('hidden');
+            filterBoxEl?.classList.add('flex');
+
             document.getElementById('roadmapTabTitle').innerText = rm.title;
             document.getElementById('roadmapTabSubtitle').innerText = rm.desc;
+            renderSavedRoadmapsSelector();
 
             const q = (document.getElementById('roadmapQuickSearch')?.value || '').toLowerCase().trim();
             const lvlFilter = document.getElementById('roadmapLevelFilter')?.value || 'ALL';
@@ -1460,7 +1584,7 @@
             }
 
             if (!courses.length) {
-                document.getElementById('roadmapTabStages').innerHTML = `
+                stagesEl.innerHTML = `
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 text-center text-xs text-slate-500">
                         Seçili filtreye uyan ders bulunamadı.
                     </div>
@@ -1476,7 +1600,7 @@
                 { name: '3. Aşama — Derinleşme ve Proje', items: courses.slice(chunkSize * 2) }
             ].filter(s => s.items.length > 0);
 
-            document.getElementById('roadmapTabStages').innerHTML = stages.map((st, idx) => `
+            stagesEl.innerHTML = stages.map((st, idx) => `
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
                     <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                         <div class="flex items-center space-x-3">
@@ -1546,24 +1670,30 @@
 
         function renderRecommendedPathsTab() {
             const list = [
-                { title: 'Tarih ve Medeniyetler Yolu', level: 'Başlangıç → Orta', desc: 'Kadim medeniyetlerden modern döneme tarihsel gelişimi özetler.', tags: ['Tarih', 'Medeniyet', 'Kronoloji'] },
-                { title: 'Müzik Teorisi ve Ritim Yolu', level: 'Başlangıç → Orta', desc: 'Nota okuma, ritim duygusu ve armoni temellerini sunar.', tags: ['Müzik', 'Nota', 'Ritim'] },
-                { title: 'Resim ve Çizim Teknikleri Yolu', level: 'Başlangıç → Orta', desc: 'Karakalem, perspektif, renk ve kompozisyon aşamalarını gösterir.', tags: ['Resim', 'Çizim', 'Perspektif'] },
-                { title: 'Psikoloji ve Davranış Yolu', level: 'Başlangıç → İleri', desc: 'Bilişsel süreçler, duygular ve insan davranışı çerçevesi sunar.', tags: ['Psikoloji', 'Bilişsel', 'Davranış'] },
-                { title: 'Oyun Geliştirme ve Yazılım Yolu', level: 'Başlangıç → İleri', desc: 'Oyun mekanikleri ve kodlama adımlarını birleştirir.', tags: ['Oyun', 'Python', 'Tasarım'] },
-                { title: 'Para Yönetimi ve Teknoloji 101', level: 'Tüm Seviyeler', desc: 'Bütçe planlama ve temel dijital okuryazarlık basamakları.', tags: ['Para Yönetimi', 'Teknoloji 101'] }
+                { title: 'Tarih ve Medeniyetler Yolu', domain: 'History', level: 'Beginner', query: 'tarih ve medeniyetler hakkında öğrenmek istiyorum', badge: 'Başlangıç → Orta', desc: 'Kadim medeniyetlerden modern döneme tarihsel gelişimi özetler.', tags: ['Tarih', 'Medeniyet', 'Kronoloji'] },
+                { title: 'Müzik Teorisi ve Ritim Yolu', domain: 'Music', level: 'Beginner', query: 'müzik teorisi ve ritim çalışmak istiyorum', badge: 'Başlangıç → Orta', desc: 'Nota okuma, ritim duygusu ve armoni temellerini sunar.', tags: ['Müzik', 'Nota', 'Ritim'] },
+                { title: 'Resim ve Çizim Teknikleri Yolu', domain: 'Art', level: 'Beginner', query: 'resim çizim ve perspektif öğrenmek istiyorum', badge: 'Başlangıç → Orta', desc: 'Karakalem, perspektif, renk ve kompozisyon aşamalarını gösterir.', tags: ['Resim', 'Çizim', 'Perspektif'] },
+                { title: 'Psikoloji ve Davranış Yolu', domain: 'Psychology', level: 'Beginner', query: 'psikoloji ve bilişsel süreçleri öğrenmek istiyorum', badge: 'Başlangıç → İleri', desc: 'Bilişsel süreçler, duygular ve insan davranışı çerçevesi sunar.', tags: ['Psikoloji', 'Bilişsel', 'Davranış'] },
+                { title: 'Oyun Geliştirme ve Yazılım Yolu', domain: 'Game', level: 'Intermediate', query: 'oyun tasarımı ve yazılım geliştirme öğrenmek istiyorum', badge: 'Başlangıç → İleri', desc: 'Oyun mekanikleri ve kodlama adımlarını birleştirir.', tags: ['Oyun', 'Python', 'Tasarım'] },
+                { title: 'Para Yönetimi ve Teknoloji 101', domain: 'Finance', level: 'Beginner', query: 'para yönetimi bütçe ve teknoloji 101 öğrenmek istiyorum', badge: 'Tüm Seviyeler', desc: 'Bütçe planlama ve temel dijital okuryazarlık basamakları.', tags: ['Para Yönetimi', 'Teknoloji 101'] }
             ];
 
             document.getElementById('recommendedPathsGrid').innerHTML = list.map(item => `
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${item.level}</span>
-                        <i data-lucide="compass" class="w-4 h-4 text-brand-500"></i>
+                <div onclick="openRecommendedPath('${item.query.replace(/'/g, "\\'")}', '${item.domain}', '${item.level}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ') openRecommendedPath('${item.query.replace(/'/g, "\\'")}', '${item.domain}', '${item.level}')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500 rounded-3xl p-6 space-y-4 shadow-sm flex flex-col justify-between cursor-pointer transition group">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${item.badge}</span>
+                            <i data-lucide="compass" class="w-4 h-4 text-brand-500 group-hover:rotate-12 transition"></i>
+                        </div>
+                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white group-hover:text-brand-600 transition">${item.title}</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${item.desc}</p>
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            ${item.tags.map(t => `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300">${t}</span>`).join('')}
+                        </div>
                     </div>
-                    <h3 class="font-extrabold text-base text-slate-900 dark:text-white">${item.title}</h3>
-                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${item.desc}</p>
-                    <div class="flex flex-wrap gap-1.5 pt-1">
-                        ${item.tags.map(t => `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300">${t}</span>`).join('')}
+                    <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-extrabold text-brand-600 dark:text-brand-400">
+                        <span>Yol Haritasını Aç</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
                 </div>
             `).join('');
@@ -1763,11 +1893,14 @@
             document.getElementById('profileStreakCount').innerText = `${userState.streak || 1} Gün`;
             document.getElementById('profileGoalCount').innerText = userState.recentGoals.length;
 
-            document.getElementById('profileRecentGoals').innerHTML = userState.recentGoals.map(g => `
-                <button onclick="applyQuickSentence('${g.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold hover:border-brand-500 border border-transparent transition">
-                    ${g}
-                </button>
-            `).join('');
+            const goalsEl = document.getElementById('profileRecentGoals');
+            goalsEl.innerHTML = userState.recentGoals.length
+                ? userState.recentGoals.map(g => `
+                    <button onclick="applyQuickSentence('${g.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold hover:border-brand-500 border border-transparent transition">
+                        ${g}
+                    </button>
+                `).join('')
+                : `<span class="text-xs text-slate-400">Henüz hedeflenmiş bir rota yok.</span>`;
         }
 
         function addCommunityComment() {
@@ -1834,7 +1967,7 @@
             const mapCourses = userState.activeRoadmap?.courses || [];
             const mapTotal = Math.max(mapCourses.length, 1);
             const mapDone = mapCourses.filter(c => userState.completedCourseIds.includes(c.id)).length;
-            const pct = Math.min(Math.round((mapDone / mapTotal) * 100), 100);
+            const pct = mapCourses.length ? Math.min(Math.round((mapDone / mapTotal) * 100), 100) : 0;
 
             const pctEl = document.getElementById('roadmapProgressText');
             const barEl = document.getElementById('roadmapProgressBar');
