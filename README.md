@@ -2,7 +2,7 @@
 
 **PathToLearn**, 10.000+ derslik geniş katalogu doğal dil ipuçları, çoklu tema paletleri, kişisel ders notları, alternatif ders değiştirme, başarı sertifikası ve `.MD` / `.JSON` dışa aktarma araçlarıyla birleştiren tek sayfa tabanlı (`SPA`), sunucusuz (`serverless` / istemci taraflı) öğrenme planlama platformudur.
 
-![PathToLearn Ana Sayfa Görünümü](./screenshots/home-indigo.png)
+![PathToLearn Ana Sayfa Görünümü](./screenshots/59744.jpg)
 
 ---
 
@@ -112,10 +112,24 @@ Tercihler `ptl_palette_v5` ve `ptl_theme_v5` anahtarlarıyla `localStorage` içi
 Uygulama 9 ana görünüm (`viewMap`) arasında geçiş yapar:
 
 1. **Ana Sayfa (`home`):** Tanıtım kartı, **Günlük Öneri** kartı, hedef cümle ve filtre formu, **Hızlı Başlangıç Cümleleri** ve **Topluluk Yorumları ve Önerileri**.
-2. **Yol Haritası (`roadmap`):** Aktif yol haritasının 3 aşamalı görünümü, **+6 Ek Ders Daha Göster**, **.MD İndir**, yol haritası içi arama/seviye filtresi, ders notları ve **Alternatif** ders butonu.
+
+![PathToLearn Ana Sayfa](./screenshots/59744.jpg)
+
+2. **Yol Haritası (`roadmap`):** Aktif yol haritasının 3 aşamalı görünümü, **+6 Ek Ders Daha Göster**, **.MD İndir**, yol haritası içi arama/seviye filtresi, ders notları ve **Alternatif** ders butonu. Harita yoksa boş durum ekranı ve **Yol Haritası Oluşturun** butonu gösterilir.
+
+![PathToLearn Yol Haritası Boş Durum](./screenshots/59746.jpg)
+
+![PathToLearn Yol Haritası Aktif Görünüm](./screenshots/roadmap.png)
+
 3. **Önerilen Yollar (`recommendedPaths`):** Tarih, Müzik, Resim, Psikoloji, Oyun Geliştirme ve Para Yönetimi & Teknoloji 101 yol özetleri.
 4. **Örnek Yol Haritaları (`exampleRoadmaps`):** Hazır senaryo kartları ve tek tıkla yol haritası sekmesinde açma aksiyonu.
+
+![PathToLearn Örnek Yol Haritaları](./screenshots/59747.jpg)
+
 5. **Önerilen Dersler (`recommendedCourses`):** Seçili branşlardan örnek ders kartları.
+
+![PathToLearn Önerilen Dersler](./screenshots/59748.jpg)
+
 6. **Bitirilenler (`completed`):** Tamamlanan ders listesi ve başarı sertifikası tetikleyicisi.
 7. **Admin (`admin`):** Yetkili admin girişinde açılan yönetim merkezi:
    - Ana sayfa, günlük öneri ve hoş geldiniz popup metinlerini düzenleme
@@ -124,11 +138,9 @@ Uygulama 9 ana görünüm (`viewMap`) arasında geçiş yapar:
    - Topluluk yorumlarını silme ve metinleri varsayılana döndürme
 8. **Profil (`profile`):** Kullanıcı adı, oturum durumu, bitirilen ders sayısı, çalışma serisi, son aranan hedefler ve `.JSON` yedekleme / geri yükleme araçları.
 
-![PathToLearn Profil Ekranı](./screenshots/themes-and-profile.png)
+![PathToLearn Profil Ekranı](./screenshots/59749.jpg)
 
 9. **Yardım (`help`):** Kullanım rehberi, hakkında bölümü, sıkça sorulan sorular ve iletişim formu.
-
-![PathToLearn Yardım ve Destek Ekranı](./screenshots/home-help.png)
 
 ---
 
@@ -154,6 +166,12 @@ Uygulama 9 ana görünüm (`viewMap`) arasında geçiş yapar:
 ```text
 pathtolearn/
 ├── public/
-│   └── index.html      # Tam uygulama (arayüz, stiller, katalog, analiz motoru, state yönetimi)
-├── screenshots/        # Uygulama ekran görüntüleri
-└── README.md           # Proje dokümantasyonu
+│   └── index.html        # Tam uygulama (arayüz, stiller, katalog, analiz motoru, state yönetimi)
+├── screenshots/
+│   ├── 59744.jpg         # Ana Sayfa ekran görüntüsü
+│   ├── 59746.jpg         # Yol Haritası boş durum ekran görüntüsü
+│   ├── 59747.jpg         # Örnek Yol Haritaları ekran görüntüsü
+│   ├── 59748.jpg         # Önerilen Dersler ekran görüntüsü
+│   ├── 59749.jpg         # Profil ekran görüntüsü
+│   └── roadmap.png       # Yol Haritası aktif görünüm ekran görüntüsü
+└── README.md             # Proje dokümantasyonu
